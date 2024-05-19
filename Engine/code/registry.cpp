@@ -15,6 +15,8 @@ namespace geo {
 			// Register all objects here using one bind call for each
 			object::bind<tree::object>(game, lua);
 			rect::bind<rect>(game, lua);
+			text::bind<text>(game, lua);
+			image::bind<image>(game, lua);
 			audio::bind<audio>(game, lua);
 			script::bind<script>(game, lua);
 			network::player::bind<network::player>(game, lua);
@@ -28,9 +30,11 @@ namespace geo {
 			lua["geo"]["input_system"] = std::make_shared<input_system>(*game);
 			input_system::bind<systems::input_system>(game, lua);
 
-			// Register all systems here
 			lua["geo"]["http_system"] = std::make_shared<http_system>(*game);
 			http_system::bind<systems::http_system>(game, lua);
+
+			lua["geo"]["tween_system"] = std::make_shared<tween_system>(*game);
+			tween_system::bind<systems::tween_system>(game, lua);
 		}
 
 		void registry::register_tree() {
@@ -95,6 +99,32 @@ namespace geo {
 			// Add get function for getting a player by name
 			lua["geo"]["players"]["get_players"] = [&]() {
 				return sol::make_object(lua, game->server->players.get_players());
+				};
+
+			// Add callback for when a player joins
+			lua["geo"]["players"]["on_join"] = [&](sol::variadic_args args) -> sol::object {
+				// Create a callback object
+				tree::callback callback;
+				callback.type = callback_type::PLAYERS_ON_JOIN;
+				callback.function = args[0].as<sol::function>();
+
+				// Add the callback to the callbacks list 
+				game->runner.callbacks.calls.push_back(callback);
+
+				return sol::nil;
+				};
+
+			// Add callback for when a player leaves
+			lua["geo"]["players"]["on_leave"] = [&](sol::variadic_args args) -> sol::object {
+				// Create a callback object
+				tree::callback callback;
+				callback.type = callback_type::PLAYERS_ON_LEAVE;
+				callback.function = args[0].as<sol::function>();
+
+				// Add the callback to the callbacks list 
+				game->runner.callbacks.calls.push_back(callback);
+
+				return sol::nil;
 				};
 
 			// Add index metamethod for accessing players

@@ -2,6 +2,7 @@
 #include "engine.h"
 #include "window.h"
 #include "../server/server.h"
+#include "../util/tween.h"
 
 namespace geo {
 	namespace core {
@@ -9,11 +10,6 @@ namespace geo {
 			// Initiate all resources
 			init_independent_resources();
 			init_resources();
-
-			// Initiate all objects
-			for (auto& obj : tree.get_objects()) {
-				obj->init();
-			}
 
 			rendering = true;
 		}
@@ -34,6 +30,21 @@ namespace geo {
 					obj->render();
 				}
 
+				// Step all tweens
+				auto& tweens = game->runner.callbacks.tweens;
+				for (auto it = tweens.begin(); it != tweens.end();) {
+					auto& tw = *it;
+					tw.callback(tw.step());
+
+					// Remove tween callback from list if it's done
+					if (tw.current_value == tw.target_value) {
+						it = tweens.erase(it);
+					}
+					else {
+						++it;
+					}
+				}
+
 				DXGI_PRESENT_PARAMETERS parameters = { 0 };
 				parameters.DirtyRectsCount = 0;
 				parameters.pDirtyRects = nullptr;
@@ -48,6 +59,10 @@ namespace geo {
 
 		ID2D1Bitmap1* engine::get_screen() {
 			return d2d_back_buffer;
+		}
+
+		ID2D1DeviceContext5* engine::get_context() {
+			return d2d_context;
 		}
 
 		void engine::init_independent_resources() {

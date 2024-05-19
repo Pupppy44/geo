@@ -6,6 +6,14 @@ namespace geo {
 	namespace code {
 		callbacks::callbacks(geo::core::game* g) : game(g) {};
 
+		void callbacks::call_callback(tree::callback_type type, sol::object data) {
+			for (auto& call : calls) {
+				if (call.type == type) {
+					call.function(data);
+				}
+			}
+		}
+
 		void callbacks::call_event(std::string id, std::string data, std::string player_id) {
 			for (auto& event : events) {
 				if (event.id == id) {

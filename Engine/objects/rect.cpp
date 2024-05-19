@@ -35,6 +35,14 @@ namespace geo {
 				return;
 			}
 
+			// Rotation
+			context->SetTransform(
+				D2D1::Matrix3x2F::Rotation(
+					get_property<float>("rotation"),
+					D2D1::Point2F(x + width / 2, y + height / 2)
+				)
+			);
+			
 			// Draw the rectangle onto the screen
 			context->DrawRoundedRectangle(
 				rectangle,
@@ -48,6 +56,9 @@ namespace geo {
 				rectangle,
 				brush
 			);
+
+			// Reset the rotation
+			context->SetTransform(D2D1::Matrix3x2F::Identity());
 		};
 	}
 }

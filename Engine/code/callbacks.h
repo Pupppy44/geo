@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../tree/callback.h"
+#include "../util/tween.h"
 
 namespace geo {
 	namespace core {
@@ -13,6 +14,9 @@ namespace geo {
 		public:
 			callbacks(geo::core::game*);
 
+			// Call a callback based on its type
+			void call_callback(tree::callback_type, sol::object);
+
 			// Call an event callback
 			void call_event(std::string, std::string, std::string = "");
 
@@ -22,8 +26,10 @@ namespace geo {
 			// Clear all callbacks
 			void clear_callbacks();
 		public:
+			std::vector<tree::callback> calls;
 			std::vector<tree::callback> events;
 			std::vector<tree::callback> inputs;
+			std::vector<util::tween> tweens;
 		private:
 			geo::core::game* game = nullptr;
 		};

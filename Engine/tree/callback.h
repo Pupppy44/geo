@@ -6,9 +6,14 @@ namespace geo {
 	namespace tree {
 		enum callback_type {
 			UNKNOWN,
+			// Events
 			EVENT_ON_FIRE,
+			// Input System
 			INPUT_ON_KEY_DOWN,
-			INPUT_ON_KEY_UP
+			INPUT_ON_KEY_UP,
+			// Players
+			PLAYERS_ON_JOIN,
+			PLAYERS_ON_LEAVE,
 		};
 		
 		struct callback {

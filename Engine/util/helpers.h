@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <algorithm>
+#pragma comment(lib, "urlmon.lib")
 
 namespace D2D1 {
 	class ColorF;
@@ -16,5 +17,11 @@ namespace geo {
 
 		// Converts a virtual key code to a string
 		std::string vk_to_string(int);
+
+		// Converts a string to a wide char
+		wchar_t* string_to_wchar(std::string title);
+
+		// Download a file from a URL
+		std::string download_file(std::string);
 	}
 }

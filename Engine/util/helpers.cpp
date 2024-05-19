@@ -60,12 +60,59 @@ namespace geo {
 			case VK_ESCAPE:
 				key_string = "Escape";
 				break;
+			case VK_LEFT:
+				key_string = "Left Arrow";
+				break;
+			case VK_RIGHT:
+				key_string = "Right Arrow";
+				break;
+			case VK_UP:
+				key_string = "Up Arrow";
+				break;
+			case VK_DOWN:
+				key_string = "Down Arrow";
+				break;
 			default:
 				// Converts to lowercase/uppercase
 				// These expressions check if caps lock is on or if the shift key is held
 				if (((GetKeyState(VK_CAPITAL) & 0x0001) != 0) || (GetAsyncKeyState(VK_SHIFT) < 0)) {
-					// Uppercase already
-					key_string = std::string(1, static_cast<char>(key));
+					// Capitalize number keys and letters
+					switch (key) {
+					case 0x30:
+						key_string = ")";
+						break;
+					case 0x31:
+						key_string = "!";
+						break;
+					case 0x32:
+						key_string = "@";
+						break;
+					case 0x33:
+						key_string = "#";
+						break;
+					case 0x34:
+						key_string = "$";
+						break;
+					case 0x35:
+						key_string = "%";
+						break;
+					case 0x36:
+						key_string = "^";
+						break;
+					case 0x37:
+						key_string = "&";
+						break;
+					case 0x38:
+						key_string = "*";
+						break;
+					case 0x39:
+						key_string = "(";
+						break;
+					default:
+						// Uppercase already
+						key_string = std::string(1, static_cast<char>(key));
+						break;
+					}
 				}
 				else {
 					// Convert to lowercase
@@ -76,6 +123,28 @@ namespace geo {
 			}
 
 			return key_string;
+		}
+		
+		wchar_t* string_to_wchar(std::string title) {
+			size_t s = strlen(title.data()) + 1;
+			wchar_t* n = new wchar_t[s];
+			size_t o;
+			mbstowcs_s(&o, n, s, title.data(), s - 1);
+			return n;
+		}
+
+		std::string download_file(std::string url) {
+			char tempFilePath[MAX_PATH];
+			DWORD bufferSize = MAX_PATH;
+
+			HRESULT result = URLDownloadToCacheFileA(nullptr, url.data(), tempFilePath, bufferSize, 0, nullptr);
+			if (SUCCEEDED(result)) {
+				std::string path(tempFilePath);
+				return path;
+			}
+			else {
+				return "";
+			}
 		}
 	}
 }

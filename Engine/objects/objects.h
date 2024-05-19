@@ -1,5 +1,7 @@
 #pragma once
 #include "rect.h"
+#include "text.h"
+#include "image.h"
 #include "audio.h"
 #include "script.h"
 #include "../network/event.h"

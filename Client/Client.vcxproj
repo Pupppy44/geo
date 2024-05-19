@@ -163,10 +163,13 @@
     <ClCompile Include="..\engine\network\client_reflector.cpp" />
     <ClCompile Include="..\Engine\network\event.cpp" />
     <ClCompile Include="..\engine\objects\audio.cpp" />
+    <ClCompile Include="..\Engine\objects\image.cpp" />
     <ClCompile Include="..\Engine\objects\rect.cpp" />
     <ClCompile Include="..\engine\objects\script.cpp" />
+    <ClCompile Include="..\Engine\objects\text.cpp" />
     <ClCompile Include="..\Engine\systems\http_system.cpp" />
     <ClCompile Include="..\Engine\systems\input_system.cpp" />
+    <ClCompile Include="..\Engine\systems\tween_system.cpp" />
     <ClCompile Include="..\engine\tree\object.cpp" />
     <ClCompile Include="..\engine\tree\tree.cpp" />
     <ClCompile Include="..\Engine\util\helpers.cpp" />

@@ -7,6 +7,9 @@
 namespace geo {
 	namespace core {
 		void game::init() {
+			// Initiate COM
+			CoInitializeEx(NULL, COINIT_MULTITHREADED);
+			
 			// Initiate the window
 			window.init(800, 600, false);
 
@@ -34,11 +37,8 @@ namespace geo {
 
 			// Set the game/window title
 			window.set_title(name + " - Geo Client (Beta)");
-
-			// Execute loaded scripts (if any)
-			runner.start();
 				
-			// Start the game loop
+			// Start the game loop (including any scripts)
 			window.start();
 		}
 

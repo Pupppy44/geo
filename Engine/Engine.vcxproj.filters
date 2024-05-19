@@ -93,6 +93,9 @@
     <ClCompile Include="systems\http_system.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="systems\tween_system.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\game.h">
@@ -192,6 +195,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\http_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\tween.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="systems\tween_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

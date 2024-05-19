@@ -64,6 +64,16 @@ namespace geo {
 				rect_object->set_properties(properties);
 				game->engine.tree.add_object(rect_object);
 			}
+			else if (type == "text") {
+				auto text_object = std::make_shared<text>();
+				text_object->set_properties(properties);
+				game->engine.tree.add_object(text_object);
+			}
+			else if (type == "image") {
+				auto image_object = std::make_shared<image>();
+				image_object->set_properties(properties);
+				game->engine.tree.add_object(image_object);
+			}
 		}
 
 		std::vector<tree::property> parser::parse_properties(pugi::xml_node object) {

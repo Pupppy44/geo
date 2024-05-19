@@ -72,9 +72,21 @@ namespace geo {
 		}
 
 		void window::start() {
-			if (game->name != "") {
-				set_title(game->name + " - Geo Client (Beta)");
+			if (game->name == "") {
+				game->name = "Untitled Game";
 			}
+
+			// Set title
+			set_title(game->name + " - Geo Client (Beta)");
+
+			// Initiate all objects
+			for (auto& obj : game->engine.tree.get_objects()) {
+				obj->context = game->engine.get_context();
+				obj->init();
+			}
+
+			// Start all scripts
+			game->runner.start();
 
 #ifdef _DEBUG
 			game->debugger.set("game_name", game->name);
@@ -100,6 +112,7 @@ namespace geo {
 				else
 				{
 					game->engine.render();
+					Sleep(1000 / 60);
 				}
 			}
 		}

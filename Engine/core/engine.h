@@ -33,6 +33,9 @@ namespace geo {
 
 			// Get the rendering screen as a bitmap
 			ID2D1Bitmap1* get_screen();
+
+			// Get the Direct2D context
+			ID2D1DeviceContext5* get_context();
 		public:
 			// Game objects tree
 			tree::tree tree;

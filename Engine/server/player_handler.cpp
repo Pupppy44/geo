@@ -22,6 +22,9 @@ namespace geo {
 			// Once the join is confirmed, we can load all game objects to the player
 			server->reflector.load_game(p);
 
+			// We can also now call the on_join callbacks set by the server
+			server->game.runner.callbacks.call_callback(tree::callback_type::PLAYERS_ON_JOIN, sol::make_object(server->game.runner.lua, plr));
+
 			DEBUG("player " + name + " joined the game (guid = '" + p.guid + "')");
 			server->debugger.set("game_players", std::to_string(players.size()));
 		};
@@ -32,6 +35,9 @@ namespace geo {
 
 			// Disconnects the player if they're still connected
 			server->svr.disconnect(plr->peer, reason);
+
+			// We can also now call the on_leave callbacks set by the server
+			server->game.runner.callbacks.call_callback(tree::callback_type::PLAYERS_ON_LEAVE, sol::make_object(server->game.runner.lua, plr));
 
 			DEBUG("player (guid = '" + plr->peer.guid + "') removed (reason = '" + reason + "')");
 			server->debugger.set("game_players", std::to_string(players.size()));

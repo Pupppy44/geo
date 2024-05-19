@@ -27,6 +27,21 @@ namespace geo {
 			// TODO: Might be better to add to the main engine/server loop
 			std::jthread([&]() {
 				while (true) {
+					// Step all tweens
+					auto& tweens = server->game.runner.callbacks.tweens;
+					for (auto it = tweens.begin(); it != tweens.end();) {
+						auto& tw = *it;
+						tw.callback(tw.step());
+
+						// Remove tween callback from list if it's done
+						if (tw.current_value == tw.target_value) {
+							it = tweens.erase(it);
+						}
+						else {
+							++it;
+						}
+					}
+					
 					for (auto& obj : server->game.engine.tree.get_objects()) {
 						for (auto& prop : obj->get_properties()) {
 							if (prop.updated) {
