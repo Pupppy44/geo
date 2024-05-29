@@ -23,6 +23,14 @@ namespace geo {
 			network::event::bind<network::event>(game, lua);
 		}
 
+		void registry::register_structs() {
+			sol::state& lua = game->runner.lua;
+
+			// Register all structures here using one bind call for each
+			local_player::bind(lua);
+			game_info::bind(lua);
+		}
+
 		void registry::register_systems() {
 			sol::state& lua = game->runner.lua;
 			
@@ -87,6 +95,27 @@ namespace geo {
 			lua.set_function("wait", [&](float secs) {				
 				std::this_thread::sleep_for(std::chrono::milliseconds((int)(secs * 1000)));
 			});
+#ifdef CLIENT
+			// Load a game from a Geo XML file
+			lua["geo"]["load"] = [&](std::string xml) {
+				game->start_local_game(xml);
+				};
+
+			// Exit the game and return to the main menu
+			lua["geo"]["exit"] = [&]() {
+				game->start_local_game(util::get_ui(1), false);
+				};
+#endif
+		}
+
+		void registry::register_game_info() {
+			sol::state& lua = game->runner.lua;
+
+			// Game info table
+			lua["geo"]["info"] = &game->info;
+
+			// Player info table
+			lua["geo"]["player"] = &game->player;
 		}
 
 #ifdef SERVER

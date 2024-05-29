@@ -123,6 +123,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,6 +164,7 @@
     <ClCompile Include="..\Engine\network\player.cpp" />
     <ClCompile Include="..\engine\network\server_reflector.cpp" />
     <ClCompile Include="..\engine\objects\audio.cpp" />
+    <ClCompile Include="..\Engine\objects\image.cpp" />
     <ClCompile Include="..\Engine\objects\rect.cpp" />
     <ClCompile Include="..\engine\objects\script.cpp" />
     <ClCompile Include="..\Engine\objects\text.cpp" />

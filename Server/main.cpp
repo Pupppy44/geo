@@ -2,7 +2,7 @@
 
 int main(int argc, char* argv[]) {
 	if (argc < 4) {
-		argv[1] = (char*)"d:\\x\\0.xml";
+		argv[1] = (char*)"X:\\GeoGames\\Word Bomb\\online\\word_bomb.xml";
 		argv[2] = (char*)"1337";
 		argv[3] = (char*)"00000000-0000-0000-0000-000000000000";
 	}

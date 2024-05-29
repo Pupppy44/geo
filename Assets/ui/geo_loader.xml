@@ -1,0 +1,69 @@
+<geo name="Geo Client Loader" background="#0D0D0D">
+    <object class="image">
+        <property name="name" type="2" value="image"/>
+        <property name="x" type="1" value="192.96"/>
+        <property name="y" type="1" value="45.12"/>
+        <property name="width" type="1" value="122.88"/>
+        <property name="height" type="1" value="124.8"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="0"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_loader_logo.png"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="loader_title"/>
+        <property name="x" type="1" value="129.6"/>
+        <property name="y" type="1" value="171.84"/>
+        <property name="width" type="1" value="249.6"/>
+        <property name="height" type="1" value="45.12"/>
+        <property name="text" type="2" value="Geo Client"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="37.3333333"/>
+        <property name="color" type="2" value="#ffffff"/>
+        <property name="align" type="2" value="center"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="loader_message"/>
+        <property name="x" type="1" value="108.48"/>
+        <property name="y" type="1" value="216.96"/>
+        <property name="width" type="1" value="291.84"/>
+        <property name="height" type="1" value="19.2"/>
+        <property name="text" type="2" value="Joining game..."/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="500"/>
+        <property name="size" type="1" value="16"/>
+        <property name="color" type="2" value="#ffffff"/>
+        <property name="align" type="2" value="center"/>
+    </object>
+    <object class="rectangle">
+        <property name="name" type="2" value="loader_bar_frame"/>
+        <property name="x" type="1" value="116.16"/>
+        <property name="y" type="1" value="246.72"/>
+        <property name="width" type="1" value="276.48"/>
+        <property name="height" type="1" value="24.96"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="color" type="2" value="#FDF1BC"/>
+    </object>
+    <object class="rectangle">
+        <property name="name" type="2" value="loader_bar"/>
+        <property name="x" type="1" value="116.16"/>
+        <property name="y" type="1" value="246.72"/>
+        <property name="width" type="1" value="30.48"/>
+        <property name="height" type="1" value="24.96"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="color" type="2" value="#F7CB6F"/>
+    </object>
+    <object class="script">
+        <property name="name" type="2" value="loader_script"/>
+        <property name="context" type="2" value="client"/>
+        <property name="code" type="2" value="
+        local info = geo.info()
+
+        geo.game.loader_message.text = 'Loading ' .. info.name .. '...'
+
+        geo.tween_system.create(30.48, 276.48, 1000, function(value)
+            geo.game.loader_bar.width = value
+        end)
+        "/>
+    </object>
+</geo>

@@ -83,7 +83,7 @@ namespace geo {
 			game->client.cli.on_disconnect([&](std::string reason) {
 				DEBUG("player disconnected (reason: " + reason + ")");
 				MessageBoxA(NULL, reason.c_str(), "Disconnected", MB_OK | MB_ICONERROR);
-				game->leave();
+				game->clear();
 			});
 		}
 

@@ -6,12 +6,13 @@ namespace geo {
 	namespace server {
 		// ! When authentication exists, we'll use tokens instead of names.
 		// ! We'll also need an authentication function/helper for this.
-		void player_handler::join_player(pascal::peer p, std::string name) {
+		void player_handler::join_player(pascal::peer p, std::string name, std::string avatar) {
 			// Create a new player object
 			auto plr = std::make_shared<network::player>(p, *server);
 
-			// Set name
+			// Set name and avatar
 			plr->set_property(tree::property(tree::property_type::STRING, "name", name));
+			plr->set_property(tree::property(tree::property_type::STRING, "avatar", avatar));
 
 			// Add the player to the player list
 			players.push_back(plr);

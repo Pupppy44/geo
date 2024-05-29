@@ -16,7 +16,10 @@ namespace geo {
 			// Parse the game data
 			game.parser.parse_game(data);
 
-			DEBUG("loaded " + game.name + " (id = " + game.id + ") with " + std::to_string(game.engine.tree.get_objects().size()) + " objects");
+			// Parse the CoreUI for clients
+			game.parser.parse_objects(util::get_ui(UI_CORE_UI));
+
+			DEBUG("loaded " + game.info.name + " (id = " + game.info.id + ") with " + std::to_string(game.engine.tree.get_objects().size()) + " objects");
 		}
 
 		void server::start(int port) {
@@ -39,8 +42,8 @@ namespace geo {
 #ifdef _DEBUG
 			debugger.set("server_port", port);
 			debugger.set("server_guid", id);
-			debugger.set("game_name", game.name);
-			debugger.set("game_id", game.id);
+			debugger.set("game_name", game.info.name);
+			debugger.set("game_id", game.info.id);
 			debugger.set("game_color", game.window.get_hex_background());
 			debugger.set("game_objects", std::to_string(game.engine.tree.get_objects().size()));
 			debugger.set("game_players", std::to_string(players.get_players().size()));
@@ -58,9 +61,13 @@ namespace geo {
 				// Parse packet
 				nlohmann::json pkt = nlohmann::json::parse(packet);
 
-				if (type == pascal::PASCAL_PACKET_JOIN_GAME) {					
+				if (type == pascal::PASCAL_PACKET_JOIN_GAME) {	
+					// Initialize name and avatar
+					std::string name = pkt[0];
+					std::string avatar = "https://geoapi.glitch.me/assets/avatars/" + name + ".bmp";
+
 					// Join in the new player
-					players.join_player(p, pkt[0]);
+					players.join_player(p, name, avatar);
 				}
 			});
 

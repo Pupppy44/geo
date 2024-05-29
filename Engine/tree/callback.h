@@ -9,6 +9,8 @@ namespace geo {
 			// Events
 			EVENT_ON_FIRE,
 			// Input System
+			INPUT_ON_CLICK,
+			INPUT_ON_HOVER,
 			INPUT_ON_KEY_DOWN,
 			INPUT_ON_KEY_UP,
 			// Players

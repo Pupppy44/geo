@@ -36,9 +36,6 @@ namespace geo {
 				color,
 				&brush
 			);
-
-			// Nobody wants aliased text...right?
-			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
 		};
 
 		void text::render() {
@@ -48,7 +45,27 @@ namespace geo {
 			auto y = get_property<float>("y");
 			auto w = get_property<float>("width");
 			auto h = get_property<float>("height");
+			auto align = get_property<std::string>("align");
+
+			// Set the text alignment
+			if (align == "center") {
+				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
+			else if (align == "right") {
+				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
+			else {
+				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
+
+			// Nobody wants aliased text...right?
+			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
 			
+			
+			// Draw text
 			context->DrawText(
 				text,
 				static_cast<UINT32>(wcslen(text) + 1),

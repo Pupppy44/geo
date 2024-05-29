@@ -31,7 +31,9 @@ namespace geo {
 					auto& tweens = server->game.runner.callbacks.tweens;
 					for (auto it = tweens.begin(); it != tweens.end();) {
 						auto& tw = *it;
-						tw.callback(tw.step());
+
+						float value = tw.step();
+						tw.callback(value, tw.elapsed);
 
 						// Remove tween callback from list if it's done
 						if (tw.current_value == tw.target_value) {
@@ -61,12 +63,14 @@ namespace geo {
 		}
 
 		void server_reflector::send_game_info(pascal::peer p) {
-			// Information packet (name, id, background, thumbnail)
+			// Information packet (name, id, background, thumbnail, width, height)
 			nlohmann::json info_packet = nlohmann::json::array();
-			info_packet.push_back(server->game.name);
-			info_packet.push_back(server->game.id);
+			info_packet.push_back(server->game.info.name);
+			info_packet.push_back(server->game.info.id);
 			info_packet.push_back(server->game.window.get_hex_background());
-			info_packet.push_back(server->game.thumbnail);
+			info_packet.push_back(server->game.info.thumbnail);
+			info_packet.push_back(server->game.info.width);
+			info_packet.push_back(server->game.info.height);
 
 			// Send GAME_JOINED packet with game information
 			server->svr.send(p, info_packet.dump(), pascal::PASCAL_PACKET_GAME_JOINED);

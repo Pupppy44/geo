@@ -43,12 +43,16 @@ namespace geo {
 			}
 		}
 		
-		bool client::join_game(std::string name) {
+		bool client::join_game() {
+			std::string name = game->player.username;
+			std::string avatar = game->player.avatar;
+			
 			DEBUG("joining as " + name);
 
 			// Create the join game packet
 			nlohmann::json join_packet = nlohmann::json::array();
 			join_packet.push_back(name); // Name/ID of client
+			join_packet.push_back(avatar); // Avatar URL of client
 
 			// Listener for game information and load confirmation
 			bool loaded = false;
@@ -58,15 +62,19 @@ namespace geo {
 					nlohmann::json game_info = nlohmann::json::parse(packet);
 
 					// Set game information
-					game->name = game_info[0];
-					game->id = game_info[1];
+					game->info.name = game_info[0];
+					game->info.id = game_info[1];
+					game->info.type = "online";
 					game->window.set_background(game_info[2]);
-					game->thumbnail = game_info[3];
+					game->info.thumbnail = game_info[3];
+					game->info.width = game_info[4];
+					game->info.height = game_info[5];
 				}
+				// We're loaded in!
 				else if (type == pascal::PASCAL_PACKET_GAME_LOADED) {
 					DEBUG("joined game as " + name + " (client_id = '" + cli.get_guid() + "')");
-
-					game->debugger.set("game_type", std::string("online"));
+										
+					game->debugger.set("game_type", game->info.type);
 					game->debugger.set("online_username", name);
 					game->debugger.set("online_client_guid", cli.get_guid());
 

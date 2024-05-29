@@ -142,6 +142,9 @@
   <ItemGroup>
     <ClInclude Include="code\callbacks.h" />
     <ClInclude Include="code\runner.h" />
+    <ClInclude Include="structs\game_info.h" />
+    <ClInclude Include="structs\local_player.h" />
+    <ClInclude Include="structs\structs.h" />
     <ClInclude Include="systems\http_system.h" />
     <ClInclude Include="systems\input_system.h" />
     <ClInclude Include="objects\button.h" />
@@ -152,6 +155,7 @@
     <ClInclude Include="systems\systems.h" />
     <ClInclude Include="tree\callback.h" />
     <ClInclude Include="systems\tween_system.h" />
+    <ClInclude Include="util\api.h" />
     <ClInclude Include="util\helpers.h" />
     <ClInclude Include="util\debugger.h" />
     <ClInclude Include="server\player_handler.h" />

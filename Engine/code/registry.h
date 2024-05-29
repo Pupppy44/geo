@@ -15,6 +15,9 @@ namespace geo {
 			// Register all classes
 			void register_objects();
 
+			// Register all structs
+			void register_structs();
+
 			// Register all systems
 			void register_systems();
 			
@@ -23,6 +26,9 @@ namespace geo {
 
 			// Register the core functions
 			void register_functions();
+
+			// Register game information
+			void register_game_info();
 
 #ifdef SERVER
 			// Register the players object

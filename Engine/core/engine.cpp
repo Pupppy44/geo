@@ -11,12 +11,16 @@ namespace geo {
 			init_independent_resources();
 			init_resources();
 
+			queue_stop = false;
 			rendering = true;
 		}
 
-		void engine::destroy() {
+		void engine::clear() {
 			// Queue a stop. The engine will stop rendering after the current frame
 			queue_stop = true;
+
+			// Clear the game tree
+			tree.clear_objects();
 		}
 
 		void engine::render() {
@@ -34,7 +38,9 @@ namespace geo {
 				auto& tweens = game->runner.callbacks.tweens;
 				for (auto it = tweens.begin(); it != tweens.end();) {
 					auto& tw = *it;
-					tw.callback(tw.step());
+					
+					float value = tw.step();
+					tw.callback(value, tw.elapsed);
 
 					// Remove tween callback from list if it's done
 					if (tw.current_value == tw.target_value) {
@@ -134,8 +140,8 @@ namespace geo {
 			swapChainDesc.SampleDesc.Quality = 0;
 			swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 			swapChainDesc.BufferCount = 2;
-			swapChainDesc.Scaling = DXGI_SCALING_STRETCH;
-			swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+			swapChainDesc.Scaling = DXGI_SCALING_NONE;
+			swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 			swapChainDesc.Flags = 0;
 
 			if (d3d_device) {
@@ -159,21 +165,6 @@ namespace geo {
 
 		bool engine::stop() {
 			if (queue_stop) {
-				// Clear the game tree
-				tree.clear_objects();
-
-				// Destroy all resources
-				d2d_back_buffer->Release();
-				dxgi_swap_chain->Release();
-				d2d_context->Release();
-				d2d_device->Release();
-				d2d_factory->Release();
-				d3d_context->Release();
-				d3d_device->Release();
-
-				// Clear window
-				game->window.clear();
-
 				// Reset queue and stop rendering
 				queue_stop = false;
 				rendering = false;
@@ -187,6 +178,11 @@ namespace geo {
 			else {
 				return false;
 			}
+		}
+
+		void engine::reset_stop() {
+			queue_stop = false;
+			rendering = true;
 		}
 	}
 }

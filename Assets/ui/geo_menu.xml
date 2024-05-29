@@ -1,0 +1,168 @@
+<geo name="Geo Client Loader" width="1420" height="792" background="#0D0D0D">
+    <!-- Navigation Bar -->
+    <object class="image">
+        <property name="name" type="2" value="menu_bar_logo"/>
+        <property name="x" type="1" value="47.04"/>
+        <property name="y" type="1" value="19.2"/>
+        <property name="width" type="1" value="52.8"/>
+        <property name="height" type="1" value="51.84"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="0"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_loader_logo.png"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="menu_bar_title"/>
+        <property name="x" type="1" value="110.4"/>
+        <property name="y" type="1" value="28.8"/>
+        <property name="width" type="1" value="174.72"/>
+        <property name="height" type="1" value="42.24"/>
+        <property name="text" type="2" value="Geo Client"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="34.6667"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="menu_bar_avatar"/>
+        <property name="x" type="1" value="1238.4"/>
+        <property name="y" type="1" value="24"/>
+        <property name="width" type="1" value="40.32"/>
+        <property name="height" type="1" value="40.32"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="100"/>
+        <property name="path" type="2" value="d:\x\geoassets\guest.jpg"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="menu_bar_username"/>
+        <property name="x" type="1" value="1290.24"/>
+        <property name="y" type="1" value="26.88"/>
+        <property name="width" type="1" value="82.56"/>
+        <property name="height" type="1" value="35.52"/>
+        <property name="text" type="2" value="Guest"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="29.3333"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <!-- Titles -->
+    <object class="text">
+        <property name="name" type="2" value="menu_title_home"/>
+        <property name="x" type="1" value="51.84"/>
+        <property name="y" type="1" value="97.92"/>
+        <property name="width" type="1" value="144.96"/>
+        <property name="height" type="1" value="64.32"/>
+        <property name="text" type="2" value="Home"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="53.33333"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="menu_title_back"/>
+        <property name="x" type="1" value="-145.92"/>
+        <property name="y" type="1" value="97.92"/>
+        <property name="width" type="1" value="122.88"/>
+        <property name="height" type="1" value="64.32"/>
+        <property name="text" type="2" value="Back"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="53.33333"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <!-- Games -->
+    <object class="image">
+        <property name="name" type="2" value="menu_game_1_image"/>
+        <property name="x" type="1" value="51.84"/>
+        <property name="y" type="1" value="174.72"/>
+        <property name="width" type="1" value="416.64"/>
+        <property name="height" type="1" value="251.52"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_test_game.png"/>
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="menu_game_1_shadow"/>
+        <property name="x" type="1" value="51.84"/>
+        <property name="y" type="1" value="174.72"/>
+        <property name="width" type="1" value="416.64"/>
+        <property name="height" type="1" value="251.52"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_game_shadow.png"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="menu_game_1_name"/>
+        <property name="x" type="1" value="72.96"/>
+        <property name="y" type="1" value="370.56"/>
+        <property name="width" type="1" value="207.36"/>
+        <property name="height" type="1" value="45.12"/>
+        <property name="text" type="2" value="Word Bomb"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="37.3333"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <object class="script">
+        <property name="name" type="2" value="menu_script_animations"/>
+        <property name="context" type="2" value="client"/>
+        <property name="code" type="2" value="
+        _G.animations = {
+            home_to_back = function()
+                geo.tween_system.create(51.84, -145.92, 500, function(value)
+                    geo.game.menu_title_home.x = value;
+                end)
+            end,
+            back_to_home = function()
+                geo.tween_system.create(-145.92, 51.84, 500, function(value)
+                    geo.game.menu_title_back.x = value;
+                end)
+            end
+        }
+        "/>
+    </object>
+    <object class="script">
+        <property name="name" type="2" value="menu_script_main"/>
+        <property name="context" type="2" value="client"/>
+        <property name="code" type="2" value="
+        geo.input_system.on_key_down(function(key)
+        _G.animations.home_to_back()
+
+            geo.tween_system.create(geo.game.menu_game_1_image.x, 105.6, 500, function(value)
+                geo.game.menu_game_1_image.x = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_image.y, 198.72, 500, function(value)
+                geo.game.menu_game_1_image.y = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_image.width, 659.52, 500, function(value)
+                geo.game.menu_game_1_image.width = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_image.height, 398.4, 500, function(value)
+                geo.game.menu_game_1_image.height = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_shadow.x, 105.6, 500, function(value)
+                geo.game.menu_game_1_shadow.x = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_shadow.y, 198.72, 500, function(value)
+                geo.game.menu_game_1_shadow.y = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_shadow.width, 659.52, 500, function(value)
+                geo.game.menu_game_1_shadow.width = value;
+            end)
+
+            geo.tween_system.create(geo.game.menu_game_1_shadow.height, 398.4, 500, function(value)
+                geo.game.menu_game_1_shadow.height = value;
+            end)
+        end)
+
+        geo.game.menu_game_1_image.on_click(function() 
+            animations.home_to_back()
+        end)
+        "/>
+    </object>
+</geo>

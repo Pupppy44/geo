@@ -1,0 +1,61 @@
+<geo name="Geo Client Registration" width="796" height="501" borderless="true" background="#0D0D0D">
+    <object class="image">
+        <property name="name" type="2" value="reg_avatar"/>
+        <property name="x" type="1" value="265.92"/>
+        <property name="y" type="1" value="309.12"/>
+        <property name="width" type="1" value="72"/>
+        <property name="height" type="1" value="72"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="100"/>
+        <property name="path" type="2" value="c:\users\Akram\AppData\Local\Temp\Akram.bmp"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="reg_username"/>
+        <property name="x" type="1" value="351.36"/>
+        <property name="y" type="1" value="322.56"/>
+        <property name="width" type="1" value="178.56"/>
+        <property name="height" type="1" value="45.12"/>
+        <property name="text" type="2" value="Pupppy44"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="37.3333333"/>
+        <property name="color" type="2" value="#ffffff"/>
+        <property name="align" type="2" value="center"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="reg_title"/>
+        <property name="x" type="1" value="119.04"/>
+        <property name="y" type="1" value="89.28"/>
+        <property name="width" type="1" value="556.8"/>
+        <property name="height" type="1" value="51.84"/>
+        <property name="text" type="2" value="Welcome to the Geo Client!"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="42.6666667"/>
+        <property name="color" type="2" value="#ffffff"/>
+        <property name="align" type="2" value="center"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="reg_description"/>
+        <property name="x" type="1" value="20.16"/>
+        <property name="y" type="1" value="159.36"/>
+        <property name="width" type="1" value="756.48"/>
+        <property name="height" type="1" value="116.16"/>
+        <property name="text" type="2" value="Since you appear to be a new user, you will need to register to chat in online games and have game data saved. All you need to do is click the register button, and we will handle all the other work. We will use your Windows username and profile picture for registration."/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="500"/>
+        <property name="size" type="1" value="24"/>
+        <property name="color" type="2" value="#ffffff"/>
+        <property name="align" type="2" value="center"/>
+    </object>
+    <object class="script">
+        <property name="name" type="2" value="loader_script"/>
+        <property name="context" type="2" value="client"/>
+        <property name="code" type="2" value="
+        geo.input_system.on_key_down(function(data)
+         geo.load('&lt;geo name=&quot;super mario&quot; width=&quot;996&quot; height=&quot;201&quot;&gt;&lt;/geo&gt;')
+         print(5)
+        end)
+        "/>
+    </object>
+</geo>

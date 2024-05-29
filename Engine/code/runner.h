@@ -22,6 +22,9 @@ namespace geo {
 
 			// Executes a script/string of code
 			void run(std::string);
+
+			// Clear the Lua environment
+			void clear();
 		public:
 			core::game* game;
 			

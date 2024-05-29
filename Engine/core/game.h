@@ -3,9 +3,15 @@
 #include "../code/runner.h"
 #include "../network/client.h"
 #include "../util/debugger.h"
+#include "../structs/structs.h"
 #include "engine.h"
 #include "window.h"
 #include "parser.h"
+#ifdef CLIENT
+#include "../../Client/resource.h"
+#else
+#include "../../Server/resource.h"
+#endif
 
 namespace geo {
 	namespace server {
@@ -29,19 +35,20 @@ namespace geo {
 			// Initiate the game
 			void init();
 
-			// Leave the game
-			void leave();
+			// Clear the game
+			void clear();
 
 			// Load and start a local game from a file
-			void start_local_game(std::string data);
+			void start_local_game(std::string data, bool load_core_ui = true);
 
 			// Connect to an online game server
 			void start_online_game(std::string ip, int port);
 		public:
 			// Game information
-			std::string name;
-			std::string id;
-			std::string thumbnail;
+			game_info info;
+			
+			// Player information
+			local_player player;
 		public:
 			// Core components
 			core::engine engine;

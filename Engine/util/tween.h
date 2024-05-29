@@ -28,7 +28,8 @@ namespace geo {
                 auto now = std::chrono::high_resolution_clock::now();
                 std::chrono::duration<float, std::milli> elapsed = now - start_time;
                 float t = elapsed.count() / time_ms;
-
+                this->elapsed = elapsed.count();
+                
                 if (t >= 1.0f) {
                     current_value = target_value;
                     return current_value;
@@ -56,10 +57,11 @@ namespace geo {
             float initial_value;
             float target_value;
             int time_ms;
+            float elapsed;
             std::chrono::high_resolution_clock::time_point start_time;
             float current_value = 0.f;
             easing easing_mode;
-            std::function<void(float)> callback = nullptr;
+            std::function<void(float, float)> callback = nullptr;
         private:
             float sine_ease_in(float t) {
                 return -cos(t * M_PI_2) + 1.0f;

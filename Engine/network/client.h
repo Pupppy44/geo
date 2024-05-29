@@ -22,7 +22,7 @@ namespace geo {
 			bool connect(std::string, int);
 
 			// Join an online game
-			bool join_game(std::string);
+			bool join_game();
 		public:
 			pascal::client cli;
 			client_reflector reflector;

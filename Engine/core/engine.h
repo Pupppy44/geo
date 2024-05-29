@@ -26,7 +26,7 @@ namespace geo {
 			void init();
 
 			// Destroy the engine!
-			void destroy();
+			void clear();
 
 			// Render the next frame onto the screen
 			void render();
@@ -36,6 +36,9 @@ namespace geo {
 
 			// Get the Direct2D context
 			ID2D1DeviceContext5* get_context();
+
+			// Reset queue stop
+			void reset_stop();
 		public:
 			// Game objects tree
 			tree::tree tree;

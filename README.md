@@ -2,6 +2,17 @@
 
 ## Update Log
 
+### 5/29/2024 (Version 0.12)
+- New CoreUI for games
+- Click and hover callbacks for objects
+- New structures for local players (geo.player) and game information (geo.info)
+- Functions for loading games (geo.load()) and exiting games (geo.exit())
+- New properties for rectangles (outlines), texts (alignment), and images (rotation)
+- New API class for accessing Geo APIs
+- Support for custom players using Windows profiles
+- Improvements for networking and scripts
+- Geo Menu testing
+
 ### 5/18/2024 (Version 0.11)
 - Development for Geo is back up!
     - Images and audios with support for online files

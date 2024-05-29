@@ -25,8 +25,10 @@ namespace geo {
 			registry.register_tree();
 			registry.register_functions();
 			registry.register_objects();
+			registry.register_structs();
 			registry.register_systems();
-				
+			registry.register_game_info();
+			
 			// TODO: Remove the preprocessor for this function, find a cleaner method
 #ifdef SERVER
 			registry.register_players();
@@ -34,27 +36,30 @@ namespace geo {
 		}
 
 		void runner::start() {
+			std::string all_scripts = "";
+			
 			for (auto& obj : game->engine.tree.get_objects()) {
 				if (obj->type() == "script") {
 					std::string script_context = obj->get_property<std::string>("context");
 
 					// Run if the script type is the same as the context or default
 					if (script_context == context || script_context == "default") {
-						run(obj->get_property<std::string>("code"));
+						std::string code = obj->get_property<std::string>("code");
+						all_scripts += "\n\n" + code;
 					}
 				}
 			}
+
+			run(all_scripts);
 		}
 
 		void runner::run(std::string code) {
 			scripts++;
-			
+
 			// Run the code in a separate thread so it doesn't block the main thread
 			std::jthread script_thread([=]() {
 				try {
 					lua.script(code);
-
-					while (1) { ;; };
 				}
 				catch (const sol::error& e) {
 					// Log the error
@@ -63,6 +68,17 @@ namespace geo {
 			});
 
 			script_thread.detach();
+		}
+
+		void runner::clear() {
+			// Clear callbacks
+			callbacks.clear_callbacks();
+			// Clear Lua environment
+			lua = sol::state();
+			// Reset the script count
+			scripts = 0;
+			// Reinitialize the runner
+			init();
 		}
 	}
 }

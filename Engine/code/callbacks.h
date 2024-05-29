@@ -23,12 +23,16 @@ namespace geo {
 			// Call an input callback
 			void call_input(tree::callback_type, std::string);
 
+			// Call a click callback
+			void call_click(std::string, int, int);
+
 			// Clear all callbacks
 			void clear_callbacks();
 		public:
 			std::vector<tree::callback> calls;
 			std::vector<tree::callback> events;
 			std::vector<tree::callback> inputs;
+			std::vector<tree::callback> clicks;
 			std::vector<util::tween> tweens;
 		private:
 			geo::core::game* game = nullptr;

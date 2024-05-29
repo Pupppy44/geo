@@ -18,6 +18,9 @@ namespace geo {
 			// Parse and load an object file into the engine's tree
 			void parse_object(std::string, std::vector<tree::property>);
 
+			// Parse objects from a string
+			void parse_objects(std::string);
+
 			// Parse an object's properties into a properties array
 			std::vector<tree::property> parse_properties(pugi::xml_node);
 		private:

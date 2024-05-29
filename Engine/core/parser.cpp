@@ -21,13 +21,16 @@ namespace geo {
 			}
 
 			// Game name, if any
-			game->name = root.attribute("name").as_string("Untitled Game");
+			game->info.name = root.attribute("name").as_string("Untitled Game");
 			// Game background as a hex color
 			game->window.set_background(root.attribute("background").as_string("#000000"));
 			// Game ID (if the game is online)
-			game->id = root.attribute("id").as_string("-1");
+			game->info.id = root.attribute("id").as_string("-1");
 			// Game thumbnail (shown in the game browser and menu)
-			game->thumbnail = root.attribute("thumbnail").as_string("https://example.com");
+			game->info.thumbnail = root.attribute("thumbnail").as_string("https://example.com");
+
+			// Window width, height, and border mode
+			game->window.set_size(root.attribute("width").as_int(1420), root.attribute("height").as_int(792), root.attribute("borderless").as_bool(false));
 
 			// Loop through all objects in <geo>
 			for (pugi::xml_node object = root.child("object"); object; object = object.next_sibling("object")) {
@@ -73,6 +76,29 @@ namespace geo {
 				auto image_object = std::make_shared<image>();
 				image_object->set_properties(properties);
 				game->engine.tree.add_object(image_object);
+			}
+		}
+
+		void parser::parse_objects(std::string data) {
+			if (!doc.load_string(data.data())) {
+				return;
+			}
+
+			// Get the root node (<geo>)
+			pugi::xml_node root = doc.child("geo");
+			if (!root) {
+				return;
+			}
+
+			// Loop through all objects in <geo>
+			for (pugi::xml_node object = root.child("object"); object; object = object.next_sibling("object")) {
+				// Object type
+				std::string type = object.attribute("class").as_string();
+				// Object properties
+				std::vector<tree::property> properties = parse_properties(object);
+
+				// Parse the object separately 
+				parse_object(type, properties);
 			}
 		}
 

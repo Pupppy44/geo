@@ -1,0 +1,232 @@
+<geo name="Geo Core UI">
+    <!-- Logo Button -->
+    <object class="rectangle">
+        <property name="name" type="2" value="__CORE_UI_MENU_BUTTON__" />
+        <property name="x" type="1" value="19.2" />
+        <property name="y" type="1" value="20.16" />
+        <property name="width" type="1" value="46.08" />
+        <property name="height" type="1" value="46.08" />
+        <property name="opacity" type="1" value="0.50" />
+        <property name="radius" type="1" value="17" />
+        <property name="color" type="2" value="#000000" />
+        <property name="outline_color" type="2" value="#F7CB6F" />
+        <property name="outline_width" type="1" value="2" />
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="__CORE_UI_MENU_LOGO__" />
+        <property name="x" type="1" value="25.42" />
+        <property name="y" type="1" value="25.92" />
+        <property name="width" type="1" value="33.6" />
+        <property name="height" type="1" value="34.56" />
+        <property name="opacity" type="1" value="1" />
+        <property name="radius" type="1" value="0" />
+        <property name="path" type="2" value="d:\x\geoassets\geo_loader_logo.png" />
+    </object>
+    <!-- User -->
+    <object class="rectangle">
+        <property name="name" type="2" value="__CORE_UI_USER_RECT__" />
+        <property name="x" type="1" value="787.2" />
+        <property name="y" type="1" value="20.16" />
+        <property name="width" type="1" value="214.08" />
+        <property name="height" type="1" value="46.08" />
+        <property name="opacity" type="1" value="0.50" />
+        <property name="radius" type="1" value="18" />
+        <property name="color" type="2" value="#000000" />
+        <property name="outline_color" type="2" value="#F7CB6F" />
+        <property name="outline_width" type="1" value="2" />
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="__CORE_UI_USER_NAME__" />
+        <property name="x" type="1" value="839.04" />
+        <property name="y" type="1" value="30.72" />
+        <property name="width" type="1" value="152.64" />
+        <property name="height" type="1" value="25.92" />
+        <property name="text" type="2" value="Guest" />
+        <property name="font" type="2" value="Gilroy" />
+        <property name="weight" type="1" value="500" />
+        <property name="size" type="1" value="21.33333" />
+        <property name="color" type="2" value="#ffffff" />
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="__CORE_UI_USER_AVATAR__" />
+        <property name="x" type="1" value="796.8" />
+        <property name="y" type="1" value="25.92" />
+        <property name="width" type="1" value="34.56" />
+        <property name="height" type="1" value="34.56" />
+        <property name="opacity" type="1" value="1" />
+        <property name="radius" type="1" value="50" />
+        <property name="path" type="2" value="" />
+    </object>
+    <!-- Sidebar -->
+    <object class="rectangle">
+        <property name="name" type="2" value="__CORE_UI_SIDEBAR_RECT__" />
+        <property name="x" type="1" value="-296.64" />
+        <property name="y" type="1" value="19.2" />
+        <property name="width" type="1" value="274.56" />
+        <property name="height" type="1" value="753.6" />
+        <property name="opacity" type="1" value="0.75" />
+        <property name="color" type="2" value="#000000" />
+        <property name="radius" type="1" value="22" />
+        <property name="outline_color" type="2" value="#F7CB6F" />
+        <property name="outline_width" type="1" value="2" />
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="__CORE_UI_SIDEBAR_THUMBNAIL__" />
+        <property name="x" type="1" value="-286.08" />
+        <property name="y" type="1" value="30.72" />
+        <property name="width" type="1" value="255.36" />
+        <property name="height" type="1" value="181.44" />
+        <property name="opacity" type="1" value="1" />
+        <property name="radius" type="1" value="20" />
+        <property name="path" type="2" value="" />
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="__CORE_UI_SIDEBAR_NAME__" />
+        <property name="x" type="1" value="-281.28" />
+        <property name="y" type="1" value="219.84" />
+        <property name="width" type="1" value="242.88" />
+        <property name="height" type="1" value="42.24" />
+        <property name="text" type="2" value="Untitled Game" />
+        <property name="font" type="2" value="Gilroy" />
+        <property name="weight" type="1" value="700" />
+        <property name="size" type="1" value="34.6667" />
+        <property name="color" type="2" value="#ffffff" />
+    </object>
+    <object class="rectangle">
+        <property name="name" type="2" value="__CORE_UI_SIDEBAR_BUTTON__" />
+        <property name="x" type="1" value="-286.08" />
+        <property name="y" type="1" value="713.28" />
+        <property name="width" type="1" value="255.36" />
+        <property name="height" type="1" value="50.88" />
+        <property name="opacity" type="1" value="1" />
+        <property name="color" type="2" value="#FF3333" />
+        <property name="radius" type="1" value="18" />
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="__CORE_UI_SIDEBAR_BUTTON_TEXT__" />
+        <property name="x" type="1" value="-204.48" />
+        <property name="y" type="1" value="720" />
+        <property name="width" type="1" value="90.24" />
+        <property name="height" type="1" value="38.4" />
+        <property name="text" type="2" value="Leave" />
+        <property name="font" type="2" value="Gilroy" />
+        <property name="weight" type="1" value="700" />
+        <property name="size" type="1" value="32" />
+        <property name="color" type="2" value="#000000" />
+    </object>
+    <!-- Main Script -->
+    <object class="script">
+        <property name="name" type="2" value="main" />
+        <property name="context" type="2" value="client" />
+        <property name="code" type="2"
+            value="
+    local function __CORE_UI_USE_YELLOW_BORDERS()
+        local hex = geo.info.background
+        hex = hex:gsub('#', '')
+        
+        local r = tonumber(hex:sub(1, 2), 16)
+        local g = tonumber(hex:sub(3, 4), 16)
+        local b = tonumber(hex:sub(5, 6), 16)
+        
+        local luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
+        
+        local threshold = 128
+        
+        if luminance &lt; threshold then
+            return true
+        else
+            return false
+        end
+    end
+
+    local time = 500
+
+    local user_rect = geo.game.__CORE_UI_USER_RECT__;
+    local username_adjust = string.len(geo.player.username) * 17.5
+    user_rect.width = user_rect.width - username_adjust
+    user_rect.x = (geo.info.width - user_rect.width) - 20.68;
+
+    local user_name = geo.game.__CORE_UI_USER_NAME__;
+    user_name.x = geo.info.width - 183.76 + username_adjust;
+    user_name.text = geo.player.username
+
+    local user_avatar = geo.game.__CORE_UI_USER_AVATAR__;
+    user_avatar.x = geo.info.width - 225.6 + username_adjust;
+    user_avatar.path = geo.player.avatar
+
+    local sidebar_thumbnail = geo.game.__CORE_UI_SIDEBAR_THUMBNAIL__;
+    sidebar_thumbnail.path = geo.info.thumbnail
+
+    local sidebar_name = geo.game.__CORE_UI_SIDEBAR_NAME__;
+    sidebar_name.text = geo.info.name
+
+    if not __CORE_UI_USE_YELLOW_BORDERS() then
+        geo.game.__CORE_UI_USER_RECT__.outline_width = 0
+        geo.game.__CORE_UI_SIDEBAR_RECT__.outline_width = 0
+        geo.game.__CORE_UI_MENU_BUTTON__.outline_width = 0
+    end
+
+    local geo_logo = geo.game.__CORE_UI_MENU_LOGO__;
+    debounce = false
+
+    local function __CORE_UI_MENU() 
+        if debounce then return end
+        debounce = true
+
+        local dir = 1;
+        if geo.game.__CORE_UI_SIDEBAR_RECT__.x > 0 then
+            dir = -1;
+        end
+
+        local sidebar_rect = geo.game.__CORE_UI_SIDEBAR_RECT__
+        geo.tween_system.create(sidebar_rect.x, sidebar_rect.x + 316.72*dir, time, function(value, elapsed)
+            sidebar_rect.x = value;
+            if elapsed >= time then
+                debounce = false
+            end
+        end)
+
+        local sidebar_thumbnail = geo.game.__CORE_UI_SIDEBAR_THUMBNAIL__
+        geo.tween_system.create(sidebar_thumbnail.x, sidebar_thumbnail.x + 315.72*dir, time, function(value)
+            sidebar_thumbnail.x = value;
+        end)
+
+        local sidebar_name = geo.game.__CORE_UI_SIDEBAR_NAME__
+        geo.tween_system.create(sidebar_name.x, sidebar_name.x + 315.72*dir, time, function(value)
+            sidebar_name.x = value;
+        end)
+
+        local sidebar_button = geo.game.__CORE_UI_SIDEBAR_BUTTON__
+        geo.tween_system.create(sidebar_button.x, sidebar_button.x + 315.72*dir, time, function(value)
+            sidebar_button.x = value;
+        end)
+
+        local sidebar_button_text = geo.game.__CORE_UI_SIDEBAR_BUTTON_TEXT__
+        geo.tween_system.create(sidebar_button_text.x, sidebar_button_text.x + 315.72*dir, time, function(value)
+            sidebar_button_text.x = value;
+        end)
+
+        local menu_logo = geo.game.__CORE_UI_MENU_LOGO__
+        geo.tween_system.create(menu_logo.y, menu_logo.y - 100*dir, time, function(value)
+            menu_logo.y = value;
+        end)
+
+        local menu_button = geo.game.__CORE_UI_MENU_BUTTON__
+        geo.tween_system.create(menu_button.y, menu_button.y - 100*dir, time, function(value)
+        menu_button.y = value;
+        end)
+    end
+
+    geo.game.__CORE_UI_SIDEBAR_BUTTON__.on_click(function()
+        geo.exit()
+    end)
+
+    geo_logo.on_click(__CORE_UI_MENU);
+    geo.input_system.on_key_down(function(key)
+        if key == 'Escape' then
+            __CORE_UI_MENU()
+        end
+    end)
+    " />
+    </object>
+</geo>

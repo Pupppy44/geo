@@ -15,9 +15,6 @@ namespace geo {
 			// Initiate the window
 			void init(int, int, bool);
 
-			// Clear the window
-			void clear();
-
 			// Exit the window
 			void exit();
 
@@ -35,6 +32,9 @@ namespace geo {
 
 			// Set the window title
 			void set_title(std::string);
+
+			// Set the window size
+			void set_size(int, int, bool = false);
 			
 			// Show the window
 			void start();

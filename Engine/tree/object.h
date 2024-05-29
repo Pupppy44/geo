@@ -3,6 +3,7 @@
 #include "../util/logger.h"
 #include "./property.h"
 #include "./function.h"
+#include "./callback.h"
 
 #include <string>
 #include <vector>
@@ -27,6 +28,7 @@ namespace geo {
 			std::string type(std::string t = "") {
 				if (t != "") {
 					_type = t;
+					setup();
 				}
 
 				return _type;
@@ -112,6 +114,12 @@ namespace geo {
 			// Define a function to the object's Lua functions
 			void define(std::string, std::function<sol::object(sol::variadic_args)>);
 
+			// Setup any properties or functions
+			void setup();
+
+			// Call a callback
+			void call(callback_type, std::vector<sol::object>);
+
 			// Property methods
 			property get_property(std::string name);
 			
@@ -144,6 +152,7 @@ namespace geo {
 			std::string _id = util::generate_id(8); // Auto-generated, read-only
 			std::vector<property> properties;
 			std::vector<function> functions;
+			std::vector<callback> callbacks;
 		};
 	}
 }

@@ -16,8 +16,8 @@ namespace geo {
 				
 				// Create the tween object
 				tween t(initial, target, duration, tween::easing::sine_ease_in_out);
-				t.callback = [=](float value) {
-					callback(value);
+				t.callback = [=](float value, float elapsed) {
+					callback(value, elapsed);
 				};
 
 				// Add to callbacks list

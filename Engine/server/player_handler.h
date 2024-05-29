@@ -10,7 +10,7 @@ namespace geo {
 			player_handler(server& s) : server(&s) {};
 
 			// Join a newly joined player
-			void join_player(pascal::peer, std::string);
+			void join_player(pascal::peer, std::string, std::string);
 
 			// Remove a player from the player list
 			void remove_player(std::shared_ptr<network::player>, std::string);

@@ -203,5 +203,17 @@
     <ClInclude Include="systems\tween_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="structs\local_player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\structs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="structs\game_info.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="util\api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

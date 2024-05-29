@@ -37,6 +37,7 @@ namespace geo {
 			float height = get_property<float>("height");
 			float opacity = get_property<float>("opacity");
 			float radius = get_property<float>("radius");
+			float rotation = get_property<float>("rotation");
 
 			if (path == "" || bitmap == NULL) return;
 
@@ -49,6 +50,9 @@ namespace geo {
 			// Create a layer for the border
 			ID2D1Layer* layer = NULL;
 			context->CreateLayer(&layer);
+
+			// Rotate the image on the center
+			context->SetTransform(D2D1::Matrix3x2F::Rotation(rotation, D2D1::Point2F(x + width / 2, y + height / 2)));
 
 			// Push the border layer to the context
 			context->PushLayer(
@@ -66,7 +70,10 @@ namespace geo {
 				opacity,
 				D2D1_INTERPOLATION_MODE_HIGH_QUALITY_CUBIC
 			);
-
+			
+			// Release rotation
+			context->SetTransform(D2D1::Matrix3x2F::Identity());
+			
 			// Remove border layer from the context
 			context->PopLayer();
 

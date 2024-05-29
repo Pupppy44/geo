@@ -23,5 +23,11 @@ namespace geo {
 
 		// Download a file from a URL
 		std::string download_file(std::string);
+
+		// Get Windows username
+		std::string get_username();
+
+		// Get a Core UI resource as XML
+		std::string get_ui(int);
 	}
 }

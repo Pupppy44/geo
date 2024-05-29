@@ -1,5 +1,7 @@
 #include "window.h"
 #include "game.h"
+#include "../tree/object.h"
+#include <d2d1helper.h>
 
 namespace geo {
 	namespace core {
@@ -10,6 +12,10 @@ namespace geo {
 
 		void window::init(int width, int height, bool load_mode) {
 			register_class();
+
+			// Set dimensions
+			game->info.width = width;
+			game->info.height = height;
 
 			// Position the window to the center
 			int window_x = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
@@ -39,23 +45,37 @@ namespace geo {
 				game);
 		}
 
-		void window::clear() {
-			HDC hdc = GetDC(hwnd);
-			RECT clientRect;
-			GetClientRect(hwnd, &clientRect);
-
-			// Clears the game window
-			PatBlt(hdc, clientRect.left, clientRect.top, clientRect.right - clientRect.left, clientRect.bottom - clientRect.top, WHITENESS);
-
-			ReleaseDC(hwnd, hdc);
-		}
-
 		void window::exit() {
 			PostMessage(hwnd, WM_QUIT, 0, 0);
 		}
 
 		void window::set_title(std::string title) {
 			SetWindowTextA(hwnd, title.data());
+		}
+
+		void window::set_size(int width, int height, bool borderless) {
+			// Set dimensions
+			game->info.width = width;
+			game->info.height = height;
+			
+			// Position the window to the center
+			int window_x = (GetSystemMetrics(SM_CXSCREEN) - width) / 2;
+			int window_y = (GetSystemMetrics(SM_CYSCREEN) - height) / 2;
+
+			// Set window flags based on load mode
+			auto flags = WS_POPUP | WS_SYSMENU;
+			if (!borderless) {
+				flags = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
+			}
+
+			// Adjust the window's rectangle
+			RECT window_rect = { 0, 0, width, height };
+			AdjustWindowRect(&window_rect, flags, FALSE);
+
+			SetWindowPos(hwnd, HWND_TOP, window_x, window_y, window_rect.right - window_rect.left, window_rect.bottom - window_rect.top, SWP_SHOWWINDOW);
+
+			// Set new flags
+			SetWindowLong(hwnd, GWL_STYLE, flags);
 		}
 
 		D2D1::ColorF window::get_background() {
@@ -69,15 +89,16 @@ namespace geo {
 		void window::set_background(std::string color) {
 			hex_background = color;
 			background = util::hex_to_color(color);
+			game->info.background = hex_background;
 		}
 
 		void window::start() {
-			if (game->name == "") {
-				game->name = "Untitled Game";
+			if (game->info.name == "") {
+				game->info.name = "Untitled Game";
 			}
 
 			// Set title
-			set_title(game->name + " - Geo Client (Beta)");
+			set_title(game->info.name + " - Geo Client (Beta)");
 
 			// Initiate all objects
 			for (auto& obj : game->engine.tree.get_objects()) {
@@ -88,9 +109,11 @@ namespace geo {
 			// Start all scripts
 			game->runner.start();
 
+			game->engine.reset_stop();
+
 #ifdef _DEBUG
-			game->debugger.set("game_name", game->name);
-			game->debugger.set("game_id", game->id);
+			game->debugger.set("game_name", game->info.name);
+			game->debugger.set("game_id", game->info.id);
 			game->debugger.set("game_color", get_hex_background());
 			game->debugger.set("game_objects", std::to_string(game->engine.tree.get_objects().size()));
 			game->debugger.set("game_scripts", game->runner.scripts);
@@ -112,7 +135,7 @@ namespace geo {
 				else
 				{
 					game->engine.render();
-					Sleep(1000 / 60);
+					Sleep(1000 / 144);
 				}
 			}
 		}
@@ -155,8 +178,52 @@ namespace geo {
 						GWLP_USERDATA
 					)));
 
+				// Potential variables
+				int mx = ((int)(short)LOWORD(lParam));
+				int my = ((int)(short)HIWORD(lParam));
+
 				switch (message)
 				{
+				case WM_LBUTTONUP:
+					// Check if the mouse clicked within any objects
+					for (auto& obj : game->engine.tree.get_objects()) {
+						float x = obj->get_property<float>("x");
+						float y = obj->get_property<float>("y");
+						float w = obj->get_property<float>("width");
+						float h = obj->get_property<float>("height");
+
+						if (mx > x && mx < x + w && my > y && my < y + h) {
+							// Coordinates of the click as Lua objects
+							std::vector<sol::object> coords = { sol::make_object(game->runner.lua, mx), sol::make_object(game->runner.lua, my) };
+
+							// Call the object's click callback
+							obj->call(
+								tree::callback_type::INPUT_ON_CLICK,
+								coords
+							);
+						}
+					}
+					break;
+				case WM_MOUSEMOVE:
+					// Check if the mouse is hovering over any objects
+					for (auto& obj : game->engine.tree.get_objects()) {
+						float x = obj->get_property<float>("x");
+						float y = obj->get_property<float>("y");
+						float w = obj->get_property<float>("width");
+						float h = obj->get_property<float>("height");
+
+						if (mx > x && mx < x + w && my > y && my < y + h) {
+							// Coordinates of the hover as Lua objects
+							std::vector<sol::object> coords = { sol::make_object(game->runner.lua, mx), sol::make_object(game->runner.lua, my) };
+
+							// Call the object's hover callback
+							obj->call(
+								tree::callback_type::INPUT_ON_HOVER,
+								coords
+							);
+						}
+					}
+					break;
 				case WM_KEYDOWN:
 					// Call key down callbacks
 					game->runner.callbacks.call_input(

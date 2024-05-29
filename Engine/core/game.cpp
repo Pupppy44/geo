@@ -11,7 +11,7 @@ namespace geo {
 			CoInitializeEx(NULL, COINIT_MULTITHREADED);
 			
 			// Initiate the window
-			window.init(800, 600, false);
+			window.init(1920, 1080, false);
 
 			// Initiate the engine
 			engine.init();
@@ -20,29 +20,45 @@ namespace geo {
 			runner.init();
 		}
 
-		void game::leave() {
+		void game::clear() {
 			// Destroy the engine to a new state
-			engine.destroy();
+			engine.clear();
+			// Clear the runner
+			runner.clear();
 		}
 
-		void game::start_local_game(std::string file) {
+		void game::start_local_game(std::string file, bool load_core_ui) {
 			debugger.set("game_type", std::string("local"));
 
-			// Get data from file
-			std::ifstream t(file);
-			std::string data((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
-			
-			// Parse the game
-			parser.parse_game(data);
+			// Clear the current game state
+			clear();
 
+			// Detect if the file is a path or XML data
+			if (file.find("<") == std::string::npos) {
+				std::ifstream t(file);
+				std::string data((std::istreambuf_iterator<char>(t)), std::istreambuf_iterator<char>());
+				file = data;
+			}
+
+			// Parse the game from the file
+			parser.parse_game(file);
+			
+			// Load the Core UI
+			if (load_core_ui) {
+				parser.parse_objects(util::get_ui(UI_CORE_UI));
+			}
+		
 			// Set the game/window title
-			window.set_title(name + " - Geo Client (Beta)");
+			window.set_title(info.name + " - Geo Client (Beta)");
 				
 			// Start the game loop (including any scripts)
 			window.start();
 		}
 
 		void game::start_online_game(std::string ip, int port) {
+			// Clear the current game state
+			clear();
+			
 			// Initiate the client and its reflector
 			client.init();
 			
@@ -54,10 +70,10 @@ namespace geo {
 			}
 
 			// Join and load the online game
-			client.join_game("Guest");
-			
-			// Execute loaded scripts
-			runner.start();
+			client.join_game();
+
+			// Update window size
+			window.set_size(info.width, info.height);
 
 			// Start the game loop
 			window.start();

@@ -36,9 +36,20 @@ namespace geo {
 				}
 			}
 		}
+
+		void callbacks::call_click(std::string id, int x, int y) {
+			for (auto& click : clicks) {
+				if (click.id == id) {
+					click.function(x, y);
+				}
+			}
+		}
 		
 		void callbacks::clear_callbacks() {
 			events.clear();
+			calls.clear();
+			inputs.clear();
+			tweens.clear();
 		}
 	}
 }

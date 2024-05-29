@@ -19,6 +19,10 @@ namespace geo {
 		}
 
 		D2D1::ColorF hex_to_color(std::string hex) {
+			if (hex == "" || hex.length() < 7) {
+				return D2D1::ColorF(0, 0, 0, 1);
+			}
+			
 			// Remove the # from the beginning of the string
 			hex.erase(0, 1);
 
@@ -146,5 +150,29 @@ namespace geo {
 				return "";
 			}
 		}
+
+		std::string get_username() {
+			char username[260 + 1];
+			DWORD size = 260 + 1;
+			GetUserNameA(username, &size);
+			return std::string(username);
+		}
+
+		std::string get_ui(int type) {
+			HMODULE hModule = GetModuleHandle(NULL);
+			HRSRC hResInfo = FindResource(hModule, MAKEINTRESOURCE(type), MAKEINTRESOURCE(255));
+			if (!hResInfo) return "";
+
+			HGLOBAL hResData = LoadResource(hModule, hResInfo);
+			if (!hResData) return "";
+
+			DWORD resSize = SizeofResource(hModule, hResInfo);
+			if (resSize == 0) return "";
+
+			const char* resData = static_cast<const char*>(LockResource(hResData));
+			if (!resData) return "";
+
+			return std::string(resData, resSize);
+		};
 	}
 }
