@@ -7,12 +7,14 @@ namespace geo {
 	namespace structs {
 		struct local_player {
 			std::string username = util::get_username();
-			std::string avatar = "C:\\Users\\" + username + "\\AppData\\Local\\Temp\\" + username + ".bmp";
+			std::string avatar = util::get_user_avatar();
+			std::string id = util::get_user_id();
 
 			static void bind(sol::state& lua) {
 				lua.new_usertype<local_player>("local_player",
 					"username", &local_player::username,
-					"avatar", &local_player::avatar
+					"avatar", &local_player::avatar,
+					"id", &local_player::id
 				);
 			}
 		};

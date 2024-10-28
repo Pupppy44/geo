@@ -11,7 +11,7 @@ namespace geo {
 			auto plr = std::make_shared<network::player>(p, *server);
 
 			// Set name and avatar
-			plr->set_property(tree::property(tree::property_type::STRING, "name", name));
+			plr->set_property(tree::property(tree::property_type::STRING, "username", name));
 			plr->set_property(tree::property(tree::property_type::STRING, "avatar", avatar));
 
 			// Add the player to the player list

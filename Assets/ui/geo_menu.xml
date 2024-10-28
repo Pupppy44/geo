@@ -125,6 +125,7 @@
         <property name="context" type="2" value="client"/>
         <property name="code" type="2" value="
         geo.input_system.on_key_down(function(key)
+        if key == 'Escape' then geo.load('X:\\GeoGames\\Word Bomb\\online\\word_bomb.xml') end
         _G.animations.home_to_back()
 
             geo.tween_system.create(geo.game.menu_game_1_image.x, 105.6, 500, function(value)

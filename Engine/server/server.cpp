@@ -64,7 +64,7 @@ namespace geo {
 				if (type == pascal::PASCAL_PACKET_JOIN_GAME) {	
 					// Initialize name and avatar
 					std::string name = pkt[0];
-					std::string avatar = "https://geoapi.glitch.me/assets/avatars/" + name + ".bmp";
+					std::string avatar = "https://geoapi.glitch.me/assets/avatars/" + name + ".bmp/";
 
 					// Join in the new player
 					players.join_player(p, name, avatar);

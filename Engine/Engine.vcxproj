@@ -145,6 +145,7 @@
     <ClInclude Include="structs\game_info.h" />
     <ClInclude Include="structs\local_player.h" />
     <ClInclude Include="structs\structs.h" />
+    <ClInclude Include="systems\data_system.h" />
     <ClInclude Include="systems\http_system.h" />
     <ClInclude Include="systems\input_system.h" />
     <ClInclude Include="objects\button.h" />
@@ -152,7 +153,9 @@
     <ClInclude Include="network\event.h" />
     <ClInclude Include="objects\rect.h" />
     <ClInclude Include="objects\text.h" />
+    <ClInclude Include="systems\speech_system.h" />
     <ClInclude Include="systems\systems.h" />
+    <ClInclude Include="objects\textbox.h" />
     <ClInclude Include="tree\callback.h" />
     <ClInclude Include="systems\tween_system.h" />
     <ClInclude Include="util\api.h" />
@@ -183,6 +186,7 @@
   <ItemGroup>
     <ClCompile Include="code\callbacks.cpp" />
     <ClCompile Include="code\runner.cpp" />
+    <ClCompile Include="systems\data_system.cpp" />
     <ClCompile Include="systems\http_system.cpp" />
     <ClCompile Include="systems\input_system.cpp" />
     <ClCompile Include="objects\button.cpp" />
@@ -190,7 +194,9 @@
     <ClCompile Include="network\event.cpp" />
     <ClCompile Include="objects\rect.cpp" />
     <ClCompile Include="objects\text.cpp" />
+    <ClCompile Include="systems\speech_system.cpp" />
     <ClCompile Include="systems\tween_system.cpp" />
+    <ClCompile Include="objects\textbox.cpp" />
     <ClCompile Include="util\helpers.cpp" />
     <ClCompile Include="server\player_handler.cpp" />
     <ClCompile Include="network\server_reflector.cpp" />

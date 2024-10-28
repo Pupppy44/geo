@@ -2,6 +2,12 @@
 #include <chrono>
 #include <d2d1_3.h>
 #include <iostream>
+#include <windows.h>
+#include <sddl.h>
+#include <iostream>
+#include <filesystem>
+#include <vector>
+#include <algorithm>
 
 namespace geo {
 	namespace util {
@@ -19,6 +25,7 @@ namespace geo {
 		}
 
 		D2D1::ColorF hex_to_color(std::string hex) {
+			// Strict check
 			if (hex == "" || hex.length() < 7) {
 				return D2D1::ColorF(0, 0, 0, 1);
 			}
@@ -128,6 +135,16 @@ namespace geo {
 
 			return key_string;
 		}
+
+		std::string wchar_to_string(const wchar_t* title) {
+			size_t s = wcslen(title) + 1;
+			char* n = new char[s];
+			size_t o;
+			wcstombs_s(&o, n, s, title, s - 1);
+			std::string str(n);
+			delete[] n;
+			return str;
+		}
 		
 		wchar_t* string_to_wchar(std::string title) {
 			size_t s = strlen(title.data()) + 1;
@@ -141,6 +158,7 @@ namespace geo {
 			char tempFilePath[MAX_PATH];
 			DWORD bufferSize = MAX_PATH;
 
+			// Download the file to tempFilePath
 			HRESULT result = URLDownloadToCacheFileA(nullptr, url.data(), tempFilePath, bufferSize, 0, nullptr);
 			if (SUCCEEDED(result)) {
 				std::string path(tempFilePath);
@@ -151,9 +169,47 @@ namespace geo {
 			}
 		}
 
+		std::string base64_to_file(std::string base64) {
+			// If the base64 string starts with "base64:" then remove it
+			if (base64.find("base64:") == 0) {
+				base64 = base64.substr(7);
+			}
+			
+			// Base64 to binary file
+			std::string decoded_data;
+			std::vector<int> T(256, -1);
+			for (int i = 0; i < 64; i++) T["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"[i]] = i;
+			int val = 0, valb = -8;
+			for (unsigned char c : base64) {
+				if (T[c] == -1) break;
+				val = (val << 6) + T[c];
+				valb += 6;
+				if (valb >= 0) {
+					decoded_data.push_back(char((val >> valb) & 0xFF));
+					valb -= 8;
+				}
+			}
+
+			// Get temp file path
+			char temp_path[MAX_PATH];
+			GetTempPathA(MAX_PATH, temp_path);
+			std::string temp_file = std::string(temp_path) + util::generate_id(8);
+
+			// Write decoded data to file
+			std::ofstream outfile(temp_file, std::ofstream::binary);
+			if (outfile) {
+				outfile.write(decoded_data.c_str(), decoded_data.length());
+				outfile.close();
+				return temp_file;
+			}
+
+			return "";
+		}
+
 		std::string get_username() {
 			char username[260 + 1];
 			DWORD size = 260 + 1;
+			// Find the username of the current user
 			GetUserNameA(username, &size);
 			return std::string(username);
 		}
@@ -169,10 +225,67 @@ namespace geo {
 			DWORD resSize = SizeofResource(hModule, hResInfo);
 			if (resSize == 0) return "";
 
+			// Get the string from the resource
 			const char* resData = static_cast<const char*>(LockResource(hResData));
 			if (!resData) return "";
 
 			return std::string(resData, resSize);
 		};
+
+		std::string get_user_id() {
+			const std::string username = get_username();
+			
+			DWORD sidSize = SECURITY_MAX_SID_SIZE;
+			PSID securityIdentifier = (PSID)malloc(sidSize);
+			char referencedDomainName[256];
+			DWORD cchReferencedDomainName = 256;
+			SID_NAME_USE sidType;
+
+			// Fetch the SID of the logged in user
+			if (LookupAccountNameA(NULL, username.c_str(), securityIdentifier, &sidSize, referencedDomainName, &cchReferencedDomainName, &sidType)) {
+				LPSTR sidString;
+				ConvertSidToStringSidA(securityIdentifier, &sidString);
+				std::string result(sidString);
+				LocalFree(sidString);
+				free(securityIdentifier);
+				return result;
+			}
+
+			free(securityIdentifier);
+			
+			return "-1";
+		}
+
+		std::string get_user_avatar() {
+			// Get user id (security ID on Windows)
+			std::string result = get_user_id();
+			
+			if (result == "-1") {
+				return "";
+			}
+				
+			// Profile pictures are stored in AccountPictures\{user_id}
+			std::string accountPicturesPath = "C:\\Users\\Public\\AccountPictures\\" + result;
+			std::vector<std::filesystem::path> jpgFiles;
+
+			for (const auto& entry : std::filesystem::directory_iterator(accountPicturesPath)) {
+				if (entry.is_regular_file() && entry.path().extension() == ".jpg") {
+					jpgFiles.push_back(entry.path());
+				}
+			}
+
+			// This sorting should get us the highest quality image.
+			// The highest quality image should be the last one based on the file name
+			std::sort(jpgFiles.begin(), jpgFiles.end(), [](const std::filesystem::path& a, const std::filesystem::path& b) {
+				return a.filename().string() < b.filename().string();
+			});
+
+			// Return the found profile picture path
+			if (!jpgFiles.empty()) {
+				return jpgFiles.front().string();
+			}
+
+			return "";
+		}
 	}
 }

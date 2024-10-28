@@ -20,8 +20,8 @@ namespace geo {
 			// Executes all scripts in a loaded game's tree
 			void start();
 
-			// Executes a script/string of code
-			void run(std::string);
+			// Executes a script as a coroutine
+			void run(std::string, sol::coroutine);
 
 			// Clear the Lua environment
 			void clear();

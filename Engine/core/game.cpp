@@ -8,7 +8,7 @@ namespace geo {
 	namespace core {
 		void game::init() {
 			// Initiate COM
-			CoInitializeEx(NULL, COINIT_MULTITHREADED);
+			CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 			
 			// Initiate the window
 			window.init(1920, 1080, false);
@@ -21,6 +21,8 @@ namespace geo {
 		}
 
 		void game::clear() {
+			// Disconnect from any servers
+			client.cli.disconnect("Client left the game");
 			// Destroy the engine to a new state
 			engine.clear();
 			// Clear the runner

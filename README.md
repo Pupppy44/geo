@@ -2,11 +2,17 @@
 
 ## Update Log
 
+### 10/27/2024 (Version 0.13)
+- Data System for storing local save data
+- Speech system for text-to-speech
+- New `hidden` property for objects
+- Studio testing
+
 ### 5/29/2024 (Version 0.12)
 - New CoreUI for games
 - Click and hover callbacks for objects
-- New structures for local players (geo.player) and game information (geo.info)
-- Functions for loading games (geo.load()) and exiting games (geo.exit())
+- New structures for local players (`geo.player`) and game information (`geo.info`)
+- Functions for loading games (`geo.load()`) and exiting games (`geo.exit()`)
 - New properties for rectangles (outlines), texts (alignment), and images (rotation)
 - New API class for accessing Geo APIs
 - Support for custom players using Windows profiles

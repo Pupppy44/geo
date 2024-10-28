@@ -80,10 +80,9 @@ namespace geo {
 			});
 
 			// Listen to disconnects from the server
-			game->client.cli.on_disconnect([&](std::string reason) {
+			game->client.cli.on_disconnect([=](std::string reason) {
 				DEBUG("player disconnected (reason: " + reason + ")");
-				MessageBoxA(NULL, reason.c_str(), "Disconnected", MB_OK | MB_ICONERROR);
-				game->clear();
+				game->runner.lua["__CORE_UI_TOGGLE_MESSAGE_RECT"]("Disconnected", reason);
 			});
 		}
 

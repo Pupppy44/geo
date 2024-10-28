@@ -36,38 +36,50 @@ namespace geo {
 		}
 
 		void runner::start() {
-			std::string all_scripts = "";
-			
 			for (auto& obj : game->engine.tree.get_objects()) {
 				if (obj->type() == "script") {
+					std::string name = obj->get_property<std::string>("name");
 					std::string script_context = obj->get_property<std::string>("context");
 
-					// Run if the script type is the same as the context or default
 					if (script_context == context || script_context == "default") {
 						std::string code = obj->get_property<std::string>("code");
-						all_scripts += "\n\n" + code;
+						try {
+							sol::protected_function pf = lua.load(code);
+							sol::coroutine cr = pf;
+
+							// Run the script
+							run(name, cr);
+						}
+						// Syntax errors
+						catch (sol::error err) {
+							std::string what = err.what();
+							ERR("Script " + name + " had a syntax error: " + what);
+						}
+						
 					}
 				}
 			}
-
-			run(all_scripts);
 		}
 
-		void runner::run(std::string code) {
+		void runner::run(std::string name, sol::coroutine cr) {
 			scripts++;
 
-			// Run the code in a separate thread so it doesn't block the main thread
-			std::jthread script_thread([=]() {
-				try {
-					lua.script(code);
-				}
-				catch (const sol::error& e) {
-					// Log the error
-					ERR(e.what());
-				}
-			});
+			if (cr.status() == sol::call_status::yielded) {
+				// resume the coroutine
+				
+				
+				auto result = cr();
 
-			script_thread.detach();
+				// Check for errors
+				if (!result.valid()) {
+					sol::error err = result;
+					std::string what = err.what();
+					ERR("Script " + name + " had an error: " + what);
+				}
+				else {
+					LOG("Script " + name + " had no errors.");
+				}
+			}
 		}
 
 		void runner::clear() {

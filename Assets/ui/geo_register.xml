@@ -56,6 +56,9 @@
          geo.load('&lt;geo name=&quot;super mario&quot; width=&quot;996&quot; height=&quot;201&quot;&gt;&lt;/geo&gt;')
          print(5)
         end)
+
+        reg_avatar.path = geo.user.avatar
+        reg_username.text = geo.user.username
         "/>
     </object>
 </geo>

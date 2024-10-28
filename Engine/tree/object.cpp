@@ -18,7 +18,7 @@ namespace geo {
             return properties;
         }
 
-        void object::set_property(property prop) {
+        void object::set_property(property prop) {            
 			// Update any existing properties
             for (auto& p : properties) {
                 if (p.name == prop.name) {
@@ -50,31 +50,31 @@ namespace geo {
 
         // Setup
         void object::setup() {
-			// Easy lambda to define a callback
-			auto define_callback = [this](callback_type type, sol::variadic_args args) -> sol::object {
-                // Create a callback object
-                callback callback;
-                callback.name = get_property<std::string>("name");
-                callback.id = id();
-                callback.type = type;
-                callback.function = args[0].as<sol::function>();
-
-                // Add the callback to the callbacks list 
-                callbacks.push_back(callback);
-
-				return sol::nil;
-			};
-            
             // On click
             define("on_click", [=](sol::variadic_args args) {
-				return define_callback(INPUT_ON_CLICK, args);
+				add_callback(INPUT_ON_CLICK, args[0].as<sol::function>());
+				return sol::nil;
             });
 
             // On hover
             define("on_hover", [=](sol::variadic_args args) {
-                return define_callback(INPUT_ON_HOVER, args);
+                add_callback(INPUT_ON_HOVER, args[0].as<sol::function>());
+				return sol::nil;
             });
         }
+
+		// Register a callback with a Lua function
+		void object::add_callback(callback_type type, sol::function func) {
+			// Create a callback object
+			callback callback;
+			callback.name = get_property<std::string>("name");
+			callback.id = id();
+			callback.type = type;
+			callback.function = func;
+
+			// Add the callback to the callbacks list 
+			callbacks.push_back(callback);
+		}
 
         // Call a callback
 		void object::call(callback_type cb_type, std::vector<sol::object> args) {

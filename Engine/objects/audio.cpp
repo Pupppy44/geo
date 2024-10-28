@@ -44,11 +44,10 @@ namespace geo {
 			update();
 
 			// Get and set duration of song
-			// TODO: Not working
 			LONGLONG duration;
 			seek->GetDuration(&duration);
-			duration /= 1000000000;
-			set_property(property(property_type::NUMBER, "duration", std::to_string(duration)));
+			float durationInSeconds = static_cast<float>(duration) / 10000000.0;
+			set_property(property(property_type::NUMBER, "duration", std::to_string(durationInSeconds)));
 
 			// Autoplay if enabled
 			if (get_property<bool>("autoplay")) {
@@ -81,8 +80,23 @@ namespace geo {
 				path = file;
 			}
 
+			// If the audio is from Base64, load it
+			if (path.starts_with("base64:")) {
+				DEBUG("loading audio from base64 (audio id=" + id() + ")");
+
+				std::string file = util::base64_to_file(path);
+
+				tree::property path_prop(tree::property_type::STRING, "path", file);
+				set_property(path_prop);
+
+				path = file;
+			}
+
 			// Set current path
 			current_path = path;
+
+			// Render audio file
+			graph->RenderFile(util::string_to_wchar(path.data()), NULL);
 		};
 		
 		void audio::play() {
@@ -92,27 +106,42 @@ namespace geo {
 			// Reset audio if already playing
 			if (playing) return;
 
-			set_property(property(property_type::BOOLEAN, "playing", "true"));
-
 			// Run the audio in a separate thread so it doesn't block the main thread
 			std::jthread([&, path]() {
-				// Render and run audio file
-				graph->RenderFile(util::string_to_wchar(path.data()), NULL);
-				control->Run();
+				// Set the playing flag to true
+				set_property(property(property_type::BOOLEAN, "playing", "true"));
 
-				// Wait for audio to finish
-				long evCode;
-				evt->WaitForCompletion(INFINITE, &evCode);
-
-				// Reset audio
+				// Stop the graph first to reset its state
 				control->Stop();
 
-				set_property(property(property_type::BOOLEAN, "playing", "false"));
+				// Seek to the beginning of the audio file
+				LONGLONG start = 0;
+				seek->SetPositions(&start, AM_SEEKING_AbsolutePositioning, NULL, AM_SEEKING_NoPositioning);
 
-				// Loop if loop is true
-				if (evCode == EC_COMPLETE && get_property<bool>("loop")) {
-					play();
-				}
+				// Restart the audio
+				control->Run();
+
+				// Wait for the media to complete
+				long evCode;
+				do {
+					evt->WaitForCompletion(INFINITE, &evCode);
+					if (evCode == EC_COMPLETE) {
+						if (get_property<bool>("loop")) {
+							// Stop the graph first to reset its state
+							control->Stop();
+
+							// Seek to the beginning of the audio file
+							seek->SetPositions(&start, AM_SEEKING_AbsolutePositioning, NULL, AM_SEEKING_NoPositioning);
+
+							// Restart the audio
+							control->Run();
+						}
+						else {
+							set_property(property(property_type::BOOLEAN, "playing", "false"));
+							break;
+						}
+					}
+				} while (true);
 			}).detach();
 		}
 	}

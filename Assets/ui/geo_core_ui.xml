@@ -114,6 +114,48 @@
         <property name="size" type="1" value="32" />
         <property name="color" type="2" value="#000000" />
     </object>
+    <!-- Messages -->
+    <object class="rectangle">
+        <property name="name" type="2" value="__CORE_UI_MESSAGE_RECT__" />
+        <property name="x" type="1" value="508.8" />
+        <property name="y" type="1" value="254.4" />
+        <property name="width" type="1" value="403.2" />
+        <property name="height" type="1" value="282.24" />
+        <property name="color" type="2" value="#000000" />
+        <property name="opacity" type="1" value="0.50" />
+        <property name="radius" type="1" value="22" />
+        <property name="outline_color" type="2" value="#F7CB6F" />
+        <property name="outline_width" type="1" value="2" />
+        <property name="hidden" type="3" value="true" />
+    </object> 
+    <object class="text">
+        <property name="name" type="2" value="__CORE_UI_MESSAGE_TEXT__" />
+        <property name="x" type="1" value="522.24" />
+        <property name="y" type="1" value="271.68" />
+        <property name="width" type="1" value="375.36" />
+        <property name="height" type="1" value="58.56" />
+        <property name="text" type="2" value="Message" />
+        <property name="font" type="2" value="Gilroy" />
+        <property name="weight" type="1" value="700" />
+        <property name="size" type="1" value="48" />
+        <property name="color" type="2" value="#ffffff" />
+        <property name="align" type="2" value="center" />
+        <property name="hidden" type="3" value="true" />
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="__CORE_UI_MESSAGE_REASON__" />
+        <property name="x" type="1" value="528" />
+        <property name="y" type="1" value="333.12" />
+        <property name="width" type="1" value="363.84" />
+        <property name="height" type="1" value="129.6" />
+        <property name="text" type="2" value="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" />
+        <property name="font" type="2" value="Gilroy" />
+        <property name="weight" type="1" value="600" />
+        <property name="size" type="1" value="26.667" />
+        <property name="color" type="2" value="#ffffff" />
+        <property name="align" type="2" value="center" />
+        <property name="hidden" type="3" value="true" />
+    </object>
     <!-- Main Script -->
     <object class="script">
         <property name="name" type="2" value="main" />
@@ -164,6 +206,7 @@
         geo.game.__CORE_UI_USER_RECT__.outline_width = 0
         geo.game.__CORE_UI_SIDEBAR_RECT__.outline_width = 0
         geo.game.__CORE_UI_MENU_BUTTON__.outline_width = 0
+        geo.game.__CORE_UI_MESSAGE_RECT__.outline_width = 0
     end
 
     local geo_logo = geo.game.__CORE_UI_MENU_LOGO__;
@@ -227,6 +270,50 @@
             __CORE_UI_MENU()
         end
     end)
+
+    local function __CORE_UI_ADJUST_MESSAGE_RECT()
+        print('Adjusting message rect and text')
+
+        local message_rect = geo.game.__CORE_UI_MESSAGE_RECT__
+        local message_text = geo.game.__CORE_UI_MESSAGE_TEXT__
+        local message_reason = geo.game.__CORE_UI_MESSAGE_REASON__
+        local screen_width = geo.info.width
+        local screen_height = geo.info.height
+
+        local text_relative_x = message_text.x - message_rect.x
+        local text_relative_y = message_text.y - message_rect.y
+
+        local reason_relative_x = message_reason.x - message_rect.x
+        local reason_relative_y = message_reason.y - message_rect.y
+
+        message_rect.x = (screen_width - message_rect.width) / 2
+        message_rect.y = (screen_height - message_rect.height) / 2
+
+        message_text.x = message_rect.x + text_relative_x
+        message_text.y = message_rect.y + text_relative_y
+
+        message_reason.x = message_rect.x + reason_relative_x
+        message_reason.y = message_rect.y + reason_relative_y
+    end
+
+    _G.__CORE_UI_TOGGLE_MESSAGE_RECT = function(title, reason)
+        local message_rect = geo.game.__CORE_UI_MESSAGE_RECT__
+        local message_text = geo.game.__CORE_UI_MESSAGE_TEXT__
+        local message_reason = geo.game.__CORE_UI_MESSAGE_REASON__
+
+        if reason.sub(1,4) == 'kick' then
+            title = 'Kicked'
+        end
+
+        message_text.text = title
+        message_reason.text = reason
+
+        __CORE_UI_ADJUST_MESSAGE_RECT()
+
+        geo.game.__CORE_UI_MESSAGE_RECT__.hidden = not geo.game.__CORE_UI_MESSAGE_RECT__.hidden
+        geo.game.__CORE_UI_MESSAGE_TEXT__.hidden = not geo.game.__CORE_UI_MESSAGE_TEXT__.hidden
+        geo.game.__CORE_UI_MESSAGE_REASON__.hidden = not geo.game.__CORE_UI_MESSAGE_REASON__.hidden
+    end
     " />
     </object>
 </geo>

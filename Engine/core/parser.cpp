@@ -39,6 +39,10 @@ namespace geo {
 				// Object properties
 				std::vector<tree::property> properties = parse_properties(object);
 
+				if (type == "") {
+					continue;
+				}
+
 				// Parse the object separately 
 				parse_object(type, properties);
 			}

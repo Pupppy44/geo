@@ -3,6 +3,8 @@
 #include "window.h"
 #include "../server/server.h"
 #include "../util/tween.h"
+#pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "d3d11.lib")
 
 namespace geo {
 	namespace core {
@@ -30,8 +32,10 @@ namespace geo {
 
 				// Render objects in the game tree
 				for (auto& obj : tree.get_objects()) {
-					obj->context = d2d_context;
-					obj->render();
+					if (!obj->get_property<bool>("hidden")) {
+						obj->context = d2d_context;
+						obj->render();
+					}
 				}
 
 				// Step all tweens

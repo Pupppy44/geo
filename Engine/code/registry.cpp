@@ -43,6 +43,12 @@ namespace geo {
 
 			lua["geo"]["tween_system"] = std::make_shared<tween_system>(*game);
 			tween_system::bind<systems::tween_system>(game, lua);
+
+			lua["geo"]["data_system"] = std::make_shared<data_system>(*game);
+			data_system::bind<systems::data_system>(game, lua);
+
+			lua["geo"]["speech_system"] = std::make_shared<speech_system>(*game);
+			speech_system::bind<systems::speech_system>(game, lua);
 		}
 
 		void registry::register_tree() {
@@ -92,9 +98,43 @@ namespace geo {
 			});
 
 			// Wait for a certain amount of seconds
-			lua.set_function("wait", [&](float secs) {				
-				std::this_thread::sleep_for(std::chrono::milliseconds((int)(secs * 1000)));
+			lua.set_function("wait", [&](float secs, sol::function func) {
+				std::jthread thread([=]() {
+					std::this_thread::sleep_for(std::chrono::milliseconds(int(secs * 1000)));
+					DEBUG("wait() waited " + std::to_string(secs) + " seconds");
+					func();
+				});
+
+				thread.detach();
 			});
+
+			// Set a view
+			lua["geo"]["set_view"] = [&](std::string view) {
+				for (auto& obj : game->engine.tree.get_objects()) {
+					std::string objectView = obj->get_property<std::string>("view");
+
+					// Skip CoreUI objects and scripts
+					if (
+						obj->get_property<std::string>("name").contains("__CORE_UI_")
+						|| obj->type() == "script"
+						|| objectView == ""
+						) {
+						continue;
+					}
+
+					// Show the view, hide the other objects
+					if (objectView == view) {
+						property prop = tree::property(property_type::BOOLEAN, "hidden", "false");
+						prop.updated = true;
+						obj->set_property(prop);
+					}
+					else {
+						property prop = tree::property(property_type::BOOLEAN, "hidden", "true");
+						prop.updated = true;
+						obj->set_property(prop);
+					}
+				}
+			};
 #ifdef CLIENT
 			// Load a game from a Geo XML file
 			lua["geo"]["load"] = [&](std::string xml) {

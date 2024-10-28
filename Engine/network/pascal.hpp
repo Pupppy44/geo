@@ -234,7 +234,7 @@ namespace pascal {
 			// Start a thread to receive packets
 			std::thread packet_thread([this]() {
 				while (true) {
-					char buffer[1024];
+					char buffer[9999];
 					int bytesReceived = recv(sock, buffer, sizeof(buffer), 0);
 
 					// If the connection is closed, destroy the client
@@ -453,7 +453,7 @@ namespace pascal {
 		// Main server loop
 		void server_loop() {
 			std::thread server_loop([&]() {
-				char buffer[1024];
+				char buffer[9999];
 				int addrLen = sizeof(clientAddr);
 
 				while (running) {

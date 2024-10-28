@@ -116,6 +116,9 @@ namespace geo {
 
 			// Setup any properties or functions
 			void setup();
+			
+			// Add a callback
+			void add_callback(callback_type, sol::function);
 
 			// Call a callback
 			void call(callback_type, std::vector<sol::object>);

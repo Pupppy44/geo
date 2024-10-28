@@ -123,6 +123,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalIncludeDirectories>X:\Geo\Engine\core;X:\Geo\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,10 +143,11 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <AdditionalOptions>/incremental %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/incremental /bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>X:\Geo\Engine\core;X:\Geo\Engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -168,8 +170,10 @@
     <ClCompile Include="..\Engine\objects\rect.cpp" />
     <ClCompile Include="..\engine\objects\script.cpp" />
     <ClCompile Include="..\Engine\objects\text.cpp" />
+    <ClCompile Include="..\Engine\systems\data_system.cpp" />
     <ClCompile Include="..\Engine\systems\http_system.cpp" />
     <ClCompile Include="..\Engine\systems\input_system.cpp" />
+    <ClCompile Include="..\Engine\systems\speech_system.cpp" />
     <ClCompile Include="..\Engine\systems\tween_system.cpp" />
     <ClCompile Include="..\engine\tree\object.cpp" />
     <ClCompile Include="..\engine\tree\tree.cpp" />

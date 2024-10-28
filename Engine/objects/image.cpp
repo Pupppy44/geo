@@ -99,6 +99,18 @@ namespace geo {
 				path = file;
 			}
 
+			// If the image is from Base64, load it
+			if (path.starts_with("base64:")) {
+				DEBUG("loading image from base64 (image id=" + id() + ")");
+
+				std::string file = util::base64_to_file(path);
+
+				tree::property path_prop(tree::property_type::STRING, "path", file);
+				set_property(path_prop);
+
+				path = file;
+			}
+
 			// Create decoder
 			HRESULT hr = wic_factory->CreateDecoderFromFilename(
 				util::string_to_wchar(path.data()),

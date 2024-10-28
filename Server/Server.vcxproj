@@ -124,6 +124,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -170,8 +171,10 @@
     <ClCompile Include="..\Engine\objects\text.cpp" />
     <ClCompile Include="..\Engine\server\player_handler.cpp" />
     <ClCompile Include="..\Engine\server\server.cpp" />
+    <ClCompile Include="..\Engine\systems\data_system.cpp" />
     <ClCompile Include="..\Engine\systems\http_system.cpp" />
     <ClCompile Include="..\Engine\systems\input_system.cpp" />
+    <ClCompile Include="..\Engine\systems\speech_system.cpp" />
     <ClCompile Include="..\Engine\systems\tween_system.cpp" />
     <ClCompile Include="..\engine\tree\object.cpp" />
     <ClCompile Include="..\engine\tree\tree.cpp" />

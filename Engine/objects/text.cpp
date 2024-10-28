@@ -14,9 +14,27 @@ namespace geo {
 				reinterpret_cast<IUnknown**>(&write_factory)
 			);
 
-			if (font_collection == NULL) {
-				write_factory->GetSystemFontCollection(&font_collection);
+			std::string source = get_property<std::string>("source");
+
+			// If the font resource is a remote resource, download it and store it in a temp directory
+			if (source.starts_with("http")) {
+				DEBUG("downloading text font from " + get_property<std::string>("path") + " (text id=" + id() + ")");
+
+				std::string file = util::download_file(source);
+
+				AddFontResourceA(file.c_str());
 			}
+
+			// If the font resource is from Base64, load it
+			if (source.starts_with("base64:")) {
+				DEBUG("loading text font from base64 (text id=" + id() + ")");
+
+				std::string file = util::base64_to_file(source);
+
+				AddFontResourceA(file.c_str());
+			}
+
+			write_factory->GetSystemFontCollection(&font_collection);
 
 			// Create the text format
 			write_factory->CreateTextFormat(
@@ -29,13 +47,6 @@ namespace geo {
 				L"",
 				&text_format
 			);
-
-			// Create the text's color brush
-			auto color = util::hex_to_color(get_property<std::string>("color"));
-			context->CreateSolidColorBrush(
-				color,
-				&brush
-			);
 		};
 
 		void text::render() {
@@ -46,6 +57,7 @@ namespace geo {
 			auto w = get_property<float>("width");
 			auto h = get_property<float>("height");
 			auto align = get_property<std::string>("align");
+			auto color = util::hex_to_color(get_property<std::string>("color"));
 
 			// Set the text alignment
 			if (align == "center") {
@@ -63,7 +75,12 @@ namespace geo {
 
 			// Nobody wants aliased text...right?
 			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
-			
+
+			// Create the text's color brush
+			context->CreateSolidColorBrush(
+				color,
+				&brush
+			);
 			
 			// Draw text
 			context->DrawText(
@@ -73,6 +90,9 @@ namespace geo {
 				D2D1::RectF(x, y, w + x, h + y),
 				brush
 			);
+
+			// Release the brush
+			brush->Release();
 		};
 	}
 }
