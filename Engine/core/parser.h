@@ -1,5 +1,5 @@
 #pragma once
-#include "../tree/property.h"
+#include "../tree/object.h"
 #include <string>
 #include <vector>
 #include <pugixml.hpp>
@@ -16,7 +16,7 @@ namespace geo {
 			bool parse_game(std::string);
 
 			// Parse and load an object file into the engine's tree
-			void parse_object(std::string, std::vector<tree::property>);
+			std::shared_ptr<tree::object> parse_object(std::string, std::vector<tree::property>);
 
 			// Parse objects from a string
 			void parse_objects(std::string);

@@ -147,12 +147,18 @@ namespace geo {
 
 			// Function methods
 			std::vector<function> get_functions();
-			
+
+			// Children methods
+			std::vector<std::shared_ptr<object>> get_children();
+
+			void add_child(std::shared_ptr<object>);
+		
 			// Drawing context
 			ID2D1DeviceContext* context = 0;
 		protected:
 			std::string _type; // Type of object, use type() to read/write
 			std::string _id = util::generate_id(8); // Auto-generated, read-only
+			std::vector<std::shared_ptr<object>> children = {}; // Children objects
 			std::vector<property> properties;
 			std::vector<function> functions;
 			std::vector<callback> callbacks;
