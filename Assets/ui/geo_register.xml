@@ -7,7 +7,7 @@
         <property name="height" type="1" value="72"/>
         <property name="opacity" type="1" value="1"/>
         <property name="radius" type="1" value="100"/>
-        <property name="path" type="2" value="c:\users\Akram\AppData\Local\Temp\Akram.bmp"/>
+        <property name="path" type="2" value="c:\users\Public\AppData\Local\Temp\Public.bmp"/>
     </object>
     <object class="text">
         <property name="name" type="2" value="reg_username"/>

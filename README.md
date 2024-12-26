@@ -1,4 +1,9 @@
-# Geo
+<p align="center"> 
+	<img width="default" height="200" src="https://i.ibb.co/mcBLfy6/geo.png">
+</p>
+
+## Geo - 2D Game Engine
+Geo is a comprehensive 2D game engine for Windows written in C++. Geo functions similarly to [Roblox](https://roblox.com), where games are designed with XML, programmed in Lua, and can be played either offline or online using its multiplayer networking support. See the [documentation](https://github.com/Pupppy44/geo/blob/master/DOCS.md) for everything you need to know.
 
 ## Update Log
 
