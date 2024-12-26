@@ -1,0 +1,4 @@
+# Exclude *.html, *.js, and *.css files from language statistics
+*.html linguist-vendored
+*.js linguist-vendored
+*.css linguist-vendored
