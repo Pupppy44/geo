@@ -109,6 +109,18 @@ namespace geo {
 				thread.detach();
 			});
 
+			// Create an object
+			lua["geo"]["create_object"] = [&](sol::this_state state, std::string type, std::string name) -> sol::object {
+				auto obj = game->parser.parse_object(type, { { property_type::STRING, "name", name } });
+				game->engine.tree.add_object(obj);
+				
+				// Initialize it here because it's not done in the parser
+				obj->context = game->engine.get_context();
+				obj->init();
+				
+				return sol::make_object(state, obj);
+			};
+
 			// Set a view
 			lua["geo"]["set_view"] = [&](std::string view) {
 				for (auto& obj : game->engine.tree.get_objects()) {

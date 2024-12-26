@@ -16,7 +16,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	core::game game;
 	game.init();
 
-	game.start_local_game("X:\\GeoGames\\Sandbox\\scrollbox_test.xml", false);
+	game.start_local_game("X:\\GeoGames\\Sandbox\\create_object_test.xml", false);
 
 	if (argc == 2) {
 #ifdef _DEBUG
