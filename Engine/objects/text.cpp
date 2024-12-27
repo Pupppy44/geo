@@ -53,7 +53,6 @@ namespace geo {
 			}
 
 			// Text properties
-			auto text = util::string_to_wchar(get_property<std::string>("text"));
 			auto x = get_property<float>("x");
 			auto y = get_property<float>("y");
 			auto w = get_property<float>("width");
@@ -82,6 +81,21 @@ namespace geo {
 				return;
 			}
 
+			// Set the text alignment
+			if (align == "center") {
+				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
+			else if (align == "right") {
+				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
+
+			// Setup rich text
+			auto rich_text_data = util::rich_text::parse(get_property<std::string>("text"));
+			wchar_t* text = util::string_to_wchar(rich_text_data.first);
+			auto elements = rich_text_data.second;
+
 			// Create text layout for rich text
 			write_factory->CreateTextLayout(
 				text,
@@ -97,20 +111,6 @@ namespace geo {
 					return;
 			}
 
-			// Set the text alignment
-			if (align == "center") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-			else if (align == "right") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-			else {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-
 			// Nobody wants aliased text...right?
 			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
 
@@ -121,7 +121,6 @@ namespace geo {
 			); 
 
 			// Apply rich text
-			auto elements = util::rich_text::parse(get_property<std::string>("text"));
 			for (auto& element : elements) {
 				element.apply(context, text_layout);
 			}
@@ -136,6 +135,7 @@ namespace geo {
 			// Release resources
 			brush->Release();
 			text_format->Release();
+			text_layout->Release();
 		};
 	}
 }

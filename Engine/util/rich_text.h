@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <vector>
 #include <regex>
@@ -49,24 +49,39 @@ namespace geo {
 				}
 			};
 
-			static std::vector<rich_text_element> parse(std::string text) {
+			static std::pair<std::string, std::vector<rich_text_element>> parse(std::string text) {
 				std::vector<rich_text_element> elements;
+				std::string cleaned_text;
+				std::regex re(R"(<(b|i|u|s|color=[#0-9a-fA-F]{7})>(.*?)<\/(b|i|u|s|color)>)");
 				std::smatch match;
-				// <b />, <i />, <u />, <s />, <color=#ffffff />
-				std::regex re(R"(<(b|i|u|s|color=[#0-9a-fA-F]{7})>(.*?)<\/\1>|<\/color>)");
 
+				size_t last_pos = 0;
+
+				// Iterate through matches
 				auto it = std::sregex_iterator(text.begin(), text.end(), re);
 				auto end = std::sregex_iterator();
 
-				std::string stripped_text = text; 
-				
 				for (; it != end; ++it) {
-					std::smatch match = *it;
+					match = *it;
+
+					// Add unmatched text before the match to the cleaned string
+					if (match.position() > last_pos) {
+						cleaned_text.append(text.substr(last_pos, match.position() - last_pos));
+					}
+
+					// Extract tag and content
 					std::string tag = match[1].str();
 					std::string content = match[2].str();
-					DWRITE_TEXT_RANGE range;
-					range.startPosition = match.position(2);
-					range.length = content.length();
+
+					// Append content (without tags) to the cleaned string
+					size_t content_start = cleaned_text.size();
+					cleaned_text.append(content);
+
+					// Create the rich text element for the matched tag
+					DWRITE_TEXT_RANGE range = {
+						static_cast<UINT32>(content_start),       // Start position in the cleaned string
+						static_cast<UINT32>(content.size())       // Length of the content
+					};
 
 					if (tag == "b") {
 						elements.push_back({ rich_text_type::bold, range, "" });
@@ -83,9 +98,17 @@ namespace geo {
 					else if (tag.rfind("color", 0) == 0) {
 						elements.push_back({ rich_text_type::color, range, tag.substr(6) });
 					}
+
+					// Update last position
+					last_pos = match.position() + match.length();
 				}
 
-				return elements;
+				// Append any remaining text after the last match
+				if (last_pos < text.size()) {
+					cleaned_text.append(text.substr(last_pos));
+				}
+
+				return { cleaned_text, elements };
 			}
 		};
 	}
