@@ -239,5 +239,8 @@
     <ClInclude Include="objects\scrollbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="util\rich_text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

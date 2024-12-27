@@ -82,6 +82,21 @@ namespace geo {
 				return;
 			}
 
+			// Create text layout for rich text
+			write_factory->CreateTextLayout(
+				text,
+				static_cast<UINT32>(wcslen(text) + 1),
+				text_format,
+				std::numeric_limits<float>::infinity(), 
+				std::numeric_limits<float>::infinity(),
+				&text_layout
+			);
+				
+			if (text_layout == nullptr) {
+				WARN("failed to create text layout for text object (text id=" + id() + "), cannot render text");
+					return;
+			}
+
 			// Set the text alignment
 			if (align == "center") {
 				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
@@ -103,14 +118,18 @@ namespace geo {
 			context->CreateSolidColorBrush(
 				color,
 				&brush
-			);
+			); 
+
+			// Apply rich text
+			auto elements = util::rich_text::parse(get_property<std::string>("text"));
+			for (auto& element : elements) {
+				element.apply(context, text_layout);
+			}
 			
 			// Draw text
-			context->DrawText(
-				text,
-				static_cast<UINT32>(wcslen(text) + 1),
-				text_format,
-				D2D1::RectF(x, y, w + x, h + y),
+			context->DrawTextLayout(
+				D2D1::Point2F(),
+				text_layout,
 				brush
 			);
 

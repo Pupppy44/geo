@@ -57,7 +57,7 @@ namespace geo {
             float initial_value;
             float target_value;
             int time_ms;
-            float elapsed;
+			float elapsed = 0.f;
             std::chrono::high_resolution_clock::time_point start_time;
             float current_value = 0.f;
             easing easing_mode;
@@ -68,7 +68,7 @@ namespace geo {
             }
 
             float sine_ease_out(float t) {
-                return sin(t * M_PI_2);
+				return (float)(sin(t * M_PI_2));
             }
 
             float sine_ease_in_out(float t) {
