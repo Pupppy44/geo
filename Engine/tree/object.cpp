@@ -61,6 +61,12 @@ namespace geo {
                 add_callback(INPUT_ON_HOVER, args[0].as<sol::function>());
 				return sol::nil;
             });
+
+			// Destroy object
+            define("destroy", [=](sol::variadic_args args) {
+                request_destroy(true);
+				return sol::nil;
+            });
         }
 
 		// Register a callback with a Lua function
@@ -96,5 +102,12 @@ namespace geo {
 		void object::add_child(std::shared_ptr<object> child) {
 			children.push_back(child);
 		}
+        
+        bool object::request_destroy(bool value) {
+			if (value) {
+                _destroy = true;
+			}
+			return _destroy;
+        }
     }
 }

@@ -149,10 +149,14 @@ namespace geo {
 			std::vector<std::shared_ptr<object>> get_children();
 
 			void add_child(std::shared_ptr<object>);
+
+			// Request to delete an object
+			bool request_destroy(bool = false);
 		
 			// Drawing context
 			ID2D1DeviceContext* context = 0;
 		protected:
+			bool _destroy = false; // Destroy request state
 			std::string _type; // Type of object, use type() to read/write
 			std::string _id = util::generate_id(8); // Auto-generated, read-only
 			std::vector<std::shared_ptr<object>> children = {}; // Children objects

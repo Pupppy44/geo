@@ -32,7 +32,9 @@ namespace geo {
 
 				// Render objects in the game tree
 				for (auto& obj : tree.get_objects()) {
-					if (!obj->get_property<bool>("hidden")) {
+					if (obj->request_destroy()) {
+						tree.remove_object(obj);
+					} else if (!obj->get_property<bool>("hidden")) {
 						obj->context = d2d_context;
 						obj->render();
 					}
