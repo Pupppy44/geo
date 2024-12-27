@@ -171,6 +171,7 @@
     <ClCompile Include="..\engine\objects\script.cpp" />
     <ClCompile Include="..\Engine\objects\scrollbox.cpp" />
     <ClCompile Include="..\Engine\objects\text.cpp" />
+    <ClCompile Include="..\Engine\objects\textbox.cpp" />
     <ClCompile Include="..\Engine\systems\data_system.cpp" />
     <ClCompile Include="..\Engine\systems\http_system.cpp" />
     <ClCompile Include="..\Engine\systems\input_system.cpp" />

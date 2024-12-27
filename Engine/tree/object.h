@@ -124,7 +124,7 @@ namespace geo {
 			property get_property(std::string name);
 			
 			template <typename T>
-			T get_property(std::string name) {
+			T get_property(std::string name, T default_value = T()) {
 				for (property& prop : properties) {
 					if (prop.name == name) {
 						// Get the actual value instead of a property object
@@ -132,7 +132,7 @@ namespace geo {
 					}
 				}
 
-				return T();
+				return default_value;
 			}
 			
 			void set_property(property prop);

@@ -33,7 +33,7 @@ namespace geo {
 					}
 
 					// We can now use the parser to parse the object
-					game->parser.parse_object(class_type, properties);
+					game->engine.tree.add_object(game->parser.parse_object(class_type, properties));
 
 					// Set ID of the object (last object is the one we just created)
 					// TODO: Make parse_object just return the object instead? 
