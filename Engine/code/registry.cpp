@@ -17,6 +17,7 @@ namespace geo {
 			rect::bind<rect>(game, lua);
 			text::bind<text>(game, lua);
 			image::bind<image>(game, lua);
+			textbox::bind<textbox>(game, lua);
 			scrollbox::bind<scrollbox>(game, lua);
 			audio::bind<audio>(game, lua);
 			script::bind<script>(game, lua);

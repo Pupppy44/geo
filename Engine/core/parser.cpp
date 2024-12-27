@@ -85,6 +85,9 @@ namespace geo {
 			else if (type == "image") {
 				object = std::make_shared<image>();
 			}
+			else if (type == "textbox") {
+				object = std::make_shared<textbox>();
+			}
 			else if (type == "scrollbox") {
 				object = std::make_shared<scrollbox>();
 			}

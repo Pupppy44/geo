@@ -2,6 +2,7 @@
 #include "rect.h"
 #include "text.h"
 #include "image.h"
+#include "textbox.h"
 #include "scrollbox.h"
 #include "audio.h"
 #include "script.h"
