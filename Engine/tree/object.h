@@ -23,6 +23,7 @@ namespace geo {
 			// Rendering
 			virtual void init() {};
 			virtual void render() {};
+			virtual void message(UINT, WPARAM, LPARAM) {};
 
 			// Types
 			std::string type(std::string t = "") {

@@ -1,5 +1,6 @@
 #pragma once
 #include "../tree/object.h"
+#include <windowsx.h>
 
 /*
 * Instead of using a render target, just render the children objects directly to the main render target and use the scrollbox object to set the clipping area
@@ -18,10 +19,17 @@ namespace geo {
 
             void init();
 			void render();
+			void message(UINT, WPARAM, LPARAM);
 		private:
+			bool is_point_in_scrollbar(POINT);
 			void update_scrollbar();
+			void calculate_max_content_height();
 		private:
-			float scroll_position = 0;			
+			float max_content_height = 0.0f;
+			float scroll_offset_y = 0.0f;  
+			bool is_dragging_scrollbar = false; 
+			int drag_start_y = 0; 
+			
 			D2D1_LAYER_PARAMETERS layer_params = {};
 		};
 	}

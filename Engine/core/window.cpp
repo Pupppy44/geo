@@ -182,6 +182,15 @@ namespace geo {
 				int mx = ((int)(short)LOWORD(lParam));
 				int my = ((int)(short)HIWORD(lParam));
 
+				if (game == nullptr) {
+					return DefWindowProc(hwnd, message, wParam, lParam);
+				}
+				
+				// Send message to all objects for object-specific handling
+				for (auto& obj : game->engine.tree.get_objects()) {
+					obj->message(message, wParam, lParam);
+				}
+
 				switch (message)
 				{
 				case WM_LBUTTONUP:
