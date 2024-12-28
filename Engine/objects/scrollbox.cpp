@@ -7,6 +7,8 @@ namespace geo {
 		};
 
 		void scrollbox::init() {
+			context->GetFactory(&factory); // For layer geometry
+
 			layer_params.geometricMask = nullptr;
 			layer_params.maskTransform = D2D1::Matrix3x2F::Identity();
 			layer_params.opacityBrush = nullptr;
@@ -40,10 +42,15 @@ namespace geo {
             float width = get_property<float>("width");
             float height = get_property<float>("height");
 
-            // Adjust the content bounds based on the scroll_offset_y without affecting the scrollbox's position
-            // This moves the content's position inside the scrollbox, but does NOT affect the scrollbox's position.
-            layer_params.contentBounds = D2D1::RectF(x, y, x + width, y + height);
-            context->PushLayer(layer_params, nullptr);
+			// Create a layer for the scrollbox (aka. the border)
+			update_border();
+			context->PushLayer(
+				D2D1::LayerParameters(
+					D2D1::RectF(x, y, x + width, y + height), // Content bounds
+					border
+				),
+				nullptr
+			);
 
             // Render the children based on the scroll offset
             for (auto child : children) {
@@ -52,20 +59,24 @@ namespace geo {
 				float original_y = child->get_property<float>("y");
 				float child_y = child->get_property<float>("y") - scroll_offset_y + y;
 
+				// Offset based on the scroll offset and parent position
                 child->set_property({ tree::property_type::NUMBER, "x", std::to_string(child_x) });
 				child->set_property({ tree::property_type::NUMBER, "y", std::to_string(child_y)});
 
-                // Render the child (don't apply scroll offset here, it's already done in contentBounds)
+                // Render the child
                 child->render(); 
 
                 child->set_property({ tree::property_type::NUMBER, "x", std::to_string(original_x) });
                 child->set_property({ tree::property_type::NUMBER, "y", std::to_string(original_y) });
             }
 
-            // Update the scrollbar position and size
+			// Update the scrollbar & border
             update_scrollbar();
+			render_border();
 
             context->PopLayer();
+
+			border->Release();
         }
 
         void scrollbox::message(UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -167,6 +178,50 @@ namespace geo {
 
 			brush->Release();
 		}
+
+		void scrollbox::render_border() {
+			if (border == nullptr) {
+				update_border();
+				render_border();
+			}
+
+			// Border Properties
+			float x = get_property<float>("x");
+			float y = get_property<float>("y");
+			float width = get_property<float>("width");
+			float height = get_property<float>("height");
+			float border_radius = get_property<float>("border_radius");
+			std::string border_color = get_property<std::string>("border_color");
+			float border_width = get_property<float>("border_width");
+
+			// Create the border brush
+			ID2D1SolidColorBrush* brush;
+			context->CreateSolidColorBrush(util::hex_to_color(border_color), &brush);
+
+			if (brush == nullptr) {
+				return WARN("failed to create brush for scrollbox border (id=" + id() + ")");
+			}
+
+			// Draw the border
+			context->DrawRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(x, y, x + width, y + height), border_radius, border_radius), brush, border_width);
+
+			brush->Release();
+		}
+
+        void scrollbox::update_border() {
+			// Border Properties
+            float x = get_property<float>("x");
+            float y = get_property<float>("y");
+			float width = get_property<float>("width");
+            float height = get_property<float>("height");
+			float border_radius = get_property<float>("border_radius");
+
+			// Create the border geometry
+			factory->CreateRoundedRectangleGeometry(
+				D2D1::RoundedRect(D2D1::RectF(x, y, x + width, y + height), border_radius, border_radius),
+				&border
+			);
+        }
 
         bool scrollbox::is_point_in_scrollbar(POINT pt) {
             float x = get_property<float>("x") + 3;

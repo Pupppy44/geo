@@ -23,6 +23,10 @@ namespace geo {
 		private:
 			bool is_point_in_scrollbar(POINT);
 			void update_scrollbar();
+
+			void render_border();
+			void update_border();
+
 			void calculate_max_content_height();
 		private:
 			float max_content_height = 0.0f;
@@ -31,6 +35,8 @@ namespace geo {
 			bool is_hovering = false;
 			float drag_start_y = 0.0f;
 			
+			ID2D1Factory* factory = NULL;
+			ID2D1RoundedRectangleGeometry* border = NULL;
 			D2D1_LAYER_PARAMETERS layer_params = {};
 		};
 	}
