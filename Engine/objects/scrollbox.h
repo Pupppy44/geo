@@ -28,7 +28,8 @@ namespace geo {
 			float max_content_height = 0.0f;
 			float scroll_offset_y = 0.0f;  
 			bool is_dragging_scrollbar = false; 
-			int drag_start_y = 0; 
+			bool is_hovering = false;
+			float drag_start_y = 0.0f;
 			
 			D2D1_LAYER_PARAMETERS layer_params = {};
 		};
