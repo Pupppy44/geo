@@ -73,6 +73,7 @@ namespace geo {
 			text_object.render();
 			
 			render_caret(text_width, text_x);
+			update_cursor();
 
 			set_property({ tree::property_type::STRING, "value", value });
 
@@ -118,7 +119,7 @@ namespace geo {
 				if (!((GetAsyncKeyState(VK_CONTROL) & 0x8000) && (wparam == 'V'))) {
 					return;
 				}
-				[[fallthrough]];
+				__fallthrough;
 			case WM_PASTE:
 				if (focused && get_property<bool>("allow_paste", true)) {
 					std::string clipboard_text = util::get_clipboard_text();
@@ -129,6 +130,10 @@ namespace geo {
 					}
 				}	
 				break;
+			}
+
+			for (auto& child : children) {
+				child->message(type, wparam, lparam);
 			}
 		};
 
@@ -162,7 +167,7 @@ namespace geo {
 				float y = get_property<float>("y");
 				float height = get_property<float>("height");
 
-				float caret_x_offset = get_property<float>("caret_x_offset", -5.0f);
+				float caret_x_offset = get_property<float>("caret_x_offset", -6.0f);
 				float caret_x = text_x + text_width + caret_x_offset;
 
 				std::string caret_color = get_property<std::string>("caret_color", "#FFFFFF");
@@ -182,6 +187,15 @@ namespace geo {
 				context->DrawLine(start, end, caret_brush, caret_width);
 
 				caret_brush->Release();
+			}
+		}
+
+		void textbox::update_cursor() {
+			if (hovered) {
+				SetCursor(LoadCursor(NULL, IDC_IBEAM));
+			}
+			else {
+				SetCursor(LoadCursor(NULL, IDC_ARROW));
 			}
 		}
 

@@ -16,6 +16,7 @@ namespace geo {
 			void message(UINT, WPARAM, LPARAM);
 		private:
 			void render_caret(float, float);
+			void update_cursor();
 			bool is_point_in_textbox(POINT);
 		private:
 			bool focused = false;
