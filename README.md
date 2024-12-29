@@ -7,6 +7,16 @@ Geo is a comprehensive 2D game engine for Windows written in C++. Geo functions 
 
 ## Update Log
 
+### 12/28/2024 (Version 0.14)
+- Happy early New Year! Geo is now public.
+	- Documentation for Geo added in DOCS.md
+- New `textbox` object for text input
+- New `scrollbox` object for objects in a scrollable box
+	- Additionally, all objects support child objects in their XML
+- Rich text tags for text objects (bold, italic, underline, strikethrough, color)
+- Added `geo.create_object(type, name)` and `object.destroy()` Lua functions
+- Improvements with default properties for objects and error handling
+
 ### 10/27/2024 (Version 0.13)
 - Data System for storing local save data
 - Speech system for text-to-speech

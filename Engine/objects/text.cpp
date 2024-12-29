@@ -58,22 +58,24 @@ namespace geo {
 			auto align = get_property<std::string>("align");
 			auto color = util::hex_to_color(get_property<std::string>("color"));
 
-			// Set the text alignment
-			if (align == "center") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-			else if (align == "right") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-
 			// Nobody wants aliased text...right?
 			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
 
 			// Creates the text resources (format, layout, etc.)
 			// This also applies any rich text
 			create_text_resources();
+
+			// Set the text alignment
+			if (align == "center") {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			} else if (align == "right") {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			} else {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
 
 			// Create the text's color brush
 			context->CreateSolidColorBrush(
