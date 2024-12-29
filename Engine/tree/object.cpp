@@ -1,8 +1,8 @@
-#include "object.h"
+#include "../core/game.h" // Includes object.h
 #include <d2d1_3.h>
 
 namespace geo {
-    namespace tree {
+    namespace tree {        
         // Properties
         property object::get_property(std::string name) {
             for (property& prop : properties) {
@@ -61,6 +61,12 @@ namespace geo {
                 add_callback(INPUT_ON_HOVER, args[0].as<sol::function>());
 				return sol::nil;
             });
+
+			// Destroy object
+            define("destroy", [=](sol::variadic_args args) {
+                request_destroy(true);
+				return sol::nil;
+            });
         }
 
 		// Register a callback with a Lua function
@@ -87,6 +93,21 @@ namespace geo {
 
         std::vector<function> object::get_functions() {
             return functions;
+        }
+        
+        std::vector<std::shared_ptr<object>> object::get_children() {
+			return children;
+        }
+
+		void object::add_child(std::shared_ptr<object> child) {
+			children.push_back(child);
+		}
+        
+        bool object::request_destroy(bool value) {
+			if (value) {
+                _destroy = true;
+			}
+			return _destroy;
         }
     }
 }

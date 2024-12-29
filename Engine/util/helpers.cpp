@@ -206,6 +206,22 @@ namespace geo {
 			return "";
 		}
 
+		std::string get_clipboard_text() {
+			if (OpenClipboard(NULL)) {
+				HANDLE h_data = GetClipboardData(CF_TEXT);
+				if (h_data) {
+					char* psz_text = static_cast<char*>(GlobalLock(h_data));
+					if (psz_text) {
+						std::string clipboard_text = psz_text;
+						GlobalUnlock(h_data);
+						CloseClipboard();
+						return clipboard_text;
+					}
+				}
+				CloseClipboard();
+			}
+		}
+
 		std::string get_username() {
 			char username[260 + 1];
 			DWORD size = 260 + 1;
@@ -243,6 +259,12 @@ namespace geo {
 
 			// Fetch the SID of the logged in user
 			if (LookupAccountNameA(NULL, username.c_str(), securityIdentifier, &sidSize, referencedDomainName, &cchReferencedDomainName, &sidType)) {
+
+				if (securityIdentifier == NULL) {
+					free(securityIdentifier);
+					return "-1";
+				}
+				
 				LPSTR sidString;
 				ConvertSidToStringSidA(securityIdentifier, &sidString);
 				std::string result(sidString);

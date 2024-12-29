@@ -31,6 +31,9 @@ namespace geo {
 		// Save a file from its Base64 representation
 		std::string base64_to_file(std::string);
 
+		// Get lastest clipboard text
+		std::string get_clipboard_text();
+
 		// Get Windows username
 		std::string get_username();
 		

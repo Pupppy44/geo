@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClInclude Include="code\callbacks.h" />
     <ClInclude Include="code\runner.h" />
+    <ClInclude Include="objects\scrollbox.h" />
     <ClInclude Include="structs\game_info.h" />
     <ClInclude Include="structs\local_player.h" />
     <ClInclude Include="structs\structs.h" />
@@ -181,11 +182,13 @@
     <ClInclude Include="server\server.h" />
     <ClInclude Include="core\window.h" />
     <ClInclude Include="tree\tree.h" />
+    <ClInclude Include="util\rich_text.h" />
     <ClInclude Include="util\tween.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\callbacks.cpp" />
     <ClCompile Include="code\runner.cpp" />
+    <ClCompile Include="objects\scrollbox.cpp" />
     <ClCompile Include="systems\data_system.cpp" />
     <ClCompile Include="systems\http_system.cpp" />
     <ClCompile Include="systems\input_system.cpp" />

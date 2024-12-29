@@ -8,11 +8,16 @@ namespace geo {
 		};
 
 		void text::init() {
-			DWriteCreateFactory(
+			HRESULT hr = DWriteCreateFactory(
 				DWRITE_FACTORY_TYPE_SHARED,
 				__uuidof(write_factory),
 				reinterpret_cast<IUnknown**>(&write_factory)
 			);
+
+			if (FAILED(hr)) {
+				ERR("failed to create DirectWrite factory for text object (text id=" + id() + ")");
+				return;
+			}
 
 			std::string source = get_property<std::string>("source");
 
@@ -36,63 +41,112 @@ namespace geo {
 
 			write_factory->GetSystemFontCollection(&font_collection);
 
-			// Create the text format
-			write_factory->CreateTextFormat(
-				util::string_to_wchar(get_property<std::string>("font")),
-				font_collection,
-				(DWRITE_FONT_WEIGHT)get_property<float>("weight"),
-				DWRITE_FONT_STYLE_NORMAL,
-				DWRITE_FONT_STRETCH_SEMI_EXPANDED,
-				get_property<float>("size") * (4 / 3), // Pixels to points
-				L"",
-				&text_format
-			);
+			if (font_collection == nullptr) {
+				ERR("failed to get system font collection for text object (text id=" + id() + ")");
+				return;
+			}
 		};
 
 		void text::render() {
+			if (write_factory == nullptr || font_collection == nullptr) {
+				return;
+			}
+
 			// Text properties
-			auto text = util::string_to_wchar(get_property<std::string>("text"));
 			auto x = get_property<float>("x");
 			auto y = get_property<float>("y");
-			auto w = get_property<float>("width");
-			auto h = get_property<float>("height");
 			auto align = get_property<std::string>("align");
 			auto color = util::hex_to_color(get_property<std::string>("color"));
 
-			// Set the text alignment
-			if (align == "center") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-			else if (align == "right") {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-			else {
-				text_format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-				text_format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
-			}
-
 			// Nobody wants aliased text...right?
 			context->SetTextAntialiasMode(D2D1_TEXT_ANTIALIAS_MODE_CLEARTYPE);
+
+			// Creates the text resources (format, layout, etc.)
+			// This also applies any rich text
+			create_text_resources();
+
+			// Set the text alignment
+			if (align == "center") {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			} else if (align == "right") {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_TRAILING);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			} else {
+				text_layout->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+				text_layout->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+			}
 
 			// Create the text's color brush
 			context->CreateSolidColorBrush(
 				color,
 				&brush
-			);
+			); 
+
+			// Apply X/Y
+			context->SetTransform(D2D1::Matrix3x2F::Translation(x, y));
 			
 			// Draw text
-			context->DrawText(
-				text,
-				static_cast<UINT32>(wcslen(text) + 1),
-				text_format,
-				D2D1::RectF(x, y, w + x, h + y),
+			context->DrawTextLayout(
+				D2D1::Point2F(),
+				text_layout,
 				brush
 			);
 
-			// Release the brush
+			// Reset X/Y
+			context->SetTransform(D2D1::Matrix3x2F::Identity());
+
+			// Release resources
 			brush->Release();
+			text_format->Release();
+			text_layout->Release();
 		};
+
+		void text::create_text_resources() {
+			// Text properties
+			auto w = get_property<float>("width");
+			auto h = get_property<float>("height");
+			auto size = get_property<float>("size");
+			auto weight = get_property<float>("weight");
+			auto font = get_property<std::string>("font");
+			
+			// Create the text format
+			write_factory->CreateTextFormat(
+				util::string_to_wchar(font),
+				font_collection,
+				(DWRITE_FONT_WEIGHT)weight,
+				DWRITE_FONT_STYLE_NORMAL,
+				DWRITE_FONT_STRETCH_SEMI_EXPANDED,
+				size * (4 / 3), // Pixels to points
+				L"",
+				&text_format
+			);
+
+			// The write factory may fail to create the text format due to missing properties
+			if (text_format == nullptr) {
+				WARN("failed to create text format for text object (text id=" + id() + "), cannot render text");
+				return;
+			}
+
+			// Setup rich text
+			auto rich_text_data = util::rich_text::parse(get_property<std::string>("text"));
+			wchar_t* text = util::string_to_wchar(rich_text_data.first);
+			auto elements = rich_text_data.second;
+
+			// Create text layout for rich text
+			write_factory->CreateTextLayout(
+				text,
+				static_cast<UINT32>(wcslen(text) + 1),
+				text_format,
+				w,
+				h,
+				&text_layout
+			);
+
+			// Apply rich text
+			for (auto& element : elements) {
+				element.apply(context, text_layout);
+			}
+		}
 	}
 }

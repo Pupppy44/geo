@@ -44,43 +44,59 @@ namespace geo {
 				}
 
 				// Parse the object separately 
-				parse_object(type, properties);
+				auto parsed_object = parse_object(type, properties);
+
+				// Once parsed, we can add any child objects
+				if (parsed_object) {
+					for (pugi::xml_node child = object.child("object"); child; child = child.next_sibling("object")) {
+						std::string child_type = child.attribute("class").as_string();
+						std::vector<tree::property> child_properties = parse_properties(child);
+						auto child_object = parse_object(child_type, child_properties);
+						if (child_object) {
+							parsed_object->add_child(child_object);
+						}
+					}
+					
+					game->engine.tree.add_object(parsed_object);
+				}
 			}
 
 			return true;
 		}
 
-		void parser::parse_object(std::string type, std::vector<tree::property> properties) {
+		std::shared_ptr<object> parser::parse_object(std::string type, std::vector<tree::property> properties) {
+			std::shared_ptr<object> object;
+			
 			if (type == "audio") {
-				auto audio_object = std::make_shared<audio>();
-				audio_object->set_properties(properties);
-				game->engine.tree.add_object(audio_object);
+				object = std::make_shared<audio>();
 			}
 			else if (type == "script") {
-				auto script_object = std::make_shared<script>();
-				script_object->set_properties(properties);
-				game->engine.tree.add_object(script_object);
+				object = std::make_shared<script>();
 			}
 			else if (type == "event") {
-				auto event_object = std::make_shared<network::event>(*game);
-				event_object->set_properties(properties);
-				game->engine.tree.add_object(event_object);
+				object = std::make_shared<network::event>(*game);
 			}
 			else if (type == "rectangle") {
-				auto rect_object = std::make_shared<rect>();
-				rect_object->set_properties(properties);
-				game->engine.tree.add_object(rect_object);
+				object = std::make_shared<rect>();
 			}
 			else if (type == "text") {
-				auto text_object = std::make_shared<text>();
-				text_object->set_properties(properties);
-				game->engine.tree.add_object(text_object);
+				object = std::make_shared<text>();
 			}
 			else if (type == "image") {
-				auto image_object = std::make_shared<image>();
-				image_object->set_properties(properties);
-				game->engine.tree.add_object(image_object);
+				object = std::make_shared<image>();
 			}
+			else if (type == "textbox") {
+				object = std::make_shared<textbox>();
+			}
+			else if (type == "scrollbox") {
+				object = std::make_shared<scrollbox>();
+			}
+
+			if (object) {
+				object->set_properties(properties);
+			}
+
+			return object;
 		}
 
 		void parser::parse_objects(std::string data) {

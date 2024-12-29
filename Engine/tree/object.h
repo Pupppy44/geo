@@ -23,6 +23,7 @@ namespace geo {
 			// Rendering
 			virtual void init() {};
 			virtual void render() {};
+			virtual void message(UINT, WPARAM, LPARAM) {};
 
 			// Types
 			std::string type(std::string t = "") {
@@ -81,32 +82,28 @@ namespace geo {
 					// Set property
 					"__newindex", [&](object& obj, const std::string& name, sol::object value) {
 						// Properties assignment
-						for (property& property : obj.get_properties()) {
-							if (property.name == name) {
-								// Update and assign the property
-								switch (property.type) {
-								case property_type::NUMBER:
-									property.set(std::to_string(value.as<float>()));
-									break;
-								case property_type::STRING:
-									property.set(value.as<std::string>());
-									break;
-								case property_type::BOOLEAN:
-									property.set(std::string(value.as<bool>() ? "true" : "false"));
-									break;
-								}
-								
-								// Update the object
-								property.updated = true;
-								
-								// Set the property
-								obj.set_property(property);
+						property new_property;
 
-								DEBUG("__newindex: Set property " + name + " to " + property.as_string());
-								
-								return;
-							}
+						if (value.is<float>()) {
+							new_property = property(property_type::NUMBER, name, std::to_string(value.as<float>()));
 						}
+						else if (value.is<std::string>()) {
+							new_property = property(property_type::STRING, name, value.as<std::string>());
+						}
+						else if (value.is<bool>()) {
+							new_property = property(property_type::BOOLEAN, name, std::string(value.as<bool>() ? "true" : "false"));
+						}
+
+						// Update the object
+						new_property.updated = true;
+
+						// Set the property
+						// If it already exists, it will just update the value
+						obj.set_property(new_property);
+
+						DEBUG("__newindex: Set property " + name + " to " + new_property.as_string());
+
+						return;
 					}
 				);
 			};
@@ -127,7 +124,7 @@ namespace geo {
 			property get_property(std::string name);
 			
 			template <typename T>
-			T get_property(std::string name) {
+			T get_property(std::string name, T default_value = T()) {
 				for (property& prop : properties) {
 					if (prop.name == name) {
 						// Get the actual value instead of a property object
@@ -135,7 +132,7 @@ namespace geo {
 					}
 				}
 
-				return T();
+				return default_value;
 			}
 			
 			void set_property(property prop);
@@ -147,12 +144,22 @@ namespace geo {
 
 			// Function methods
 			std::vector<function> get_functions();
-			
+
+			// Children methods
+			std::vector<std::shared_ptr<object>> get_children();
+
+			void add_child(std::shared_ptr<object>);
+
+			// Request to delete an object
+			bool request_destroy(bool = false);
+		
 			// Drawing context
 			ID2D1DeviceContext* context = 0;
 		protected:
+			bool _destroy = false; // Destroy request state
 			std::string _type; // Type of object, use type() to read/write
 			std::string _id = util::generate_id(8); // Auto-generated, read-only
+			std::vector<std::shared_ptr<object>> children = {}; // Children objects
 			std::vector<property> properties;
 			std::vector<function> functions;
 			std::vector<callback> callbacks;

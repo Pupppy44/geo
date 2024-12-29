@@ -1,4 +1,4 @@
-<geo name="Geo Client Loader" width="1420" height="792" background="#0D0D0D">
+<geo name="Geo Client Menu" width="1420" height="792" background="#000000">
     <!-- Navigation Bar -->
     <object class="image">
         <property name="name" type="2" value="menu_bar_logo"/>
@@ -102,6 +102,40 @@
         <property name="size" type="1" value="37.3333"/>
         <property name="color" type="2" value="#ffffff"/>
     </object>
+    <!-- Game 2 -->
+    <object class="image">
+        <property name="name" type="2" value="menu_game_2_image"/>
+        <property name="x" type="1" value="487.68"/>
+        <property name="y" type="1" value="174.72"/>
+        <property name="width" type="1" value="416.64"/>
+        <property name="height" type="1" value="251.52"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_test_game.png"/>
+    </object>
+    <object class="image">
+        <property name="name" type="2" value="menu_game_2_shadow"/>
+        <property name="x" type="1" value="487.68"/>
+        <property name="y" type="1" value="174.72"/>
+        <property name="width" type="1" value="416.64"/>
+        <property name="height" type="1" value="251.52"/>
+        <property name="opacity" type="1" value="1"/>
+        <property name="radius" type="1" value="15"/>
+        <property name="path" type="2" value="d:\x\geoassets\geo_game_shadow.png"/>
+    </object>
+    <object class="text">
+        <property name="name" type="2" value="menu_game_2_name"/>
+        <property name="x" type="1" value="508.8"/>
+        <property name="y" type="1" value="370.56"/>
+        <property name="width" type="1" value="207.36"/>
+        <property name="height" type="1" value="45.12"/>
+        <property name="text" type="2" value="Word Bomb"/>
+        <property name="font" type="2" value="Gilroy"/>
+        <property name="weight" type="1" value="700"/>
+        <property name="size" type="1" value="37.3333"/>
+        <property name="color" type="2" value="#ffffff"/>
+    </object>
+    <!-- Scripts -->
     <object class="script">
         <property name="name" type="2" value="menu_script_animations"/>
         <property name="context" type="2" value="client"/>
@@ -116,6 +150,26 @@
                 geo.tween_system.create(-145.92, 51.84, 500, function(value)
                     geo.game.menu_title_back.x = value;
                 end)
+            end,
+            tween = function(objects_to_tween, tween_for)
+                for _, obj_data in ipairs(objects_to_tween) do
+                    if tween_for and string.find(obj_data.object, tween_for) == nil then
+                        for i,v in pairs(_G.hide_dimensions) do
+                            if v.object == obj_data.object then
+                                obj_data.target = v.target
+                            end
+                        end
+                    end
+
+                    local obj = geo.game[obj_data.object]
+                    local target = obj_data.target
+
+                    for prop, target_value in pairs(target) do
+                        geo.tween_system.create(obj[prop], target_value, 500, function(value)
+                            obj[prop] = value
+                        end)
+                    end
+                end
             end
         }
         "/>
@@ -124,45 +178,65 @@
         <property name="name" type="2" value="menu_script_main"/>
         <property name="context" type="2" value="client"/>
         <property name="code" type="2" value="
+                local function deepCopy(table)
+            local copy = {}
+            for k, v in pairs(table) do
+                if type(v) == 'table' then
+                    copy[k] = deepCopy(v) 
+                else
+                    copy[k] = v
+                end
+            end
+            return copy
+        end
+
+        _G.original_dimensions = {
+            { object = 'menu_game_1_image', target = {x = geo.game.menu_game_1_image.x, y = geo.game.menu_game_1_image.y, width = geo.game.menu_game_1_image.width, height = geo.game.menu_game_1_image.height} },
+            { object = 'menu_game_1_shadow', target = {x = geo.game.menu_game_1_shadow.x, y = geo.game.menu_game_1_shadow.y, width = geo.game.menu_game_1_shadow.width, height = geo.game.menu_game_1_shadow.height} },
+            { object = 'menu_game_1_name', target = {x = geo.game.menu_game_1_name.x, y = geo.game.menu_game_1_name.y, width = geo.game.menu_game_1_name.width, height = geo.game.menu_game_1_name.height, size = geo.game.menu_game_1_name.size} },
+
+            { object = 'menu_game_2_image', target = {x = geo.game.menu_game_2_image.x, y = geo.game.menu_game_2_image.y, width = geo.game.menu_game_2_image.width, height = geo.game.menu_game_2_image.height} },
+            { object = 'menu_game_2_shadow', target = {x = geo.game.menu_game_2_shadow.x, y = geo.game.menu_game_2_shadow.y, width = geo.game.menu_game_2_shadow.width, height = geo.game.menu_game_2_shadow.height} },
+            { object = 'menu_game_2_name', target = {x = geo.game.menu_game_2_name.x, y = geo.game.menu_game_2_name.y, width = geo.game.menu_game_2_name.width, height = geo.game.menu_game_2_name.height, size = geo.game.menu_game_2_name.size} }
+        }
+
+        _G.original_dimensions = deepCopy(_G.original_dimensions)
+
+        _G.hide_dimensions = {
+            { object = 'menu_game_1_image', target = {x = geo.game.menu_game_1_image.x+1411.2, y = geo.game.menu_game_1_image.y, width = geo.game.menu_game_1_image.width, height = geo.game.menu_game_1_image.height} },
+            { object = 'menu_game_1_shadow', target = {x = geo.game.menu_game_1_shadow.x+1411.2, y = geo.game.menu_game_1_shadow.y, width = geo.game.menu_game_1_shadow.width, height = geo.game.menu_game_1_shadow.height} },
+            { object = 'menu_game_1_name', target = {x = geo.game.menu_game_1_name.x+1411.2, y = geo.game.menu_game_1_name.y, width = geo.game.menu_game_1_name.width, height = geo.game.menu_game_1_name.height, size = geo.game.menu_game_1_name.size} },
+
+            { object = 'menu_game_2_image', target = {x = geo.game.menu_game_2_image.x+1411.2, y = geo.game.menu_game_2_image.y, width = geo.game.menu_game_2_image.width, height = geo.game.menu_game_2_image.height} },
+            { object = 'menu_game_2_shadow', target = {x = geo.game.menu_game_2_shadow.x+1411.2, y = geo.game.menu_game_2_shadow.y, width = geo.game.menu_game_2_shadow.width, height = geo.game.menu_game_2_shadow.height} },
+            { object = 'menu_game_2_name', target = {x = geo.game.menu_game_2_name.x+1411.2, y = geo.game.menu_game_2_name.y, width = geo.game.menu_game_2_name.width, height = geo.game.menu_game_2_name.height, size = geo.game.menu_game_2_name.size} }
+        }
+
+        local mainView = {x = 105.6, y = 198.72, width = 659.52, height = 398.4}
+        local textView = {x = 130.56, y = 521.28, width = 295.68, height = 64.32, size = 53.3333}
+        
+        local objects = {
+            { object = 'menu_game_1_image',   target = mainView },
+            { object = 'menu_game_1_shadow',  target = mainView },
+            { object = 'menu_game_1_name',    target = textView },
+
+            { object = 'menu_game_2_image',   target = mainView },
+            { object = 'menu_game_2_shadow',  target = mainView },
+            { object = 'menu_game_2_name',    target = textView },
+        }
+
         geo.input_system.on_key_down(function(key)
-        if key == 'Escape' then geo.load('X:\\GeoGames\\Word Bomb\\online\\word_bomb.xml') end
-        _G.animations.home_to_back()
-
-            geo.tween_system.create(geo.game.menu_game_1_image.x, 105.6, 500, function(value)
-                geo.game.menu_game_1_image.x = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_image.y, 198.72, 500, function(value)
-                geo.game.menu_game_1_image.y = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_image.width, 659.52, 500, function(value)
-                geo.game.menu_game_1_image.width = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_image.height, 398.4, 500, function(value)
-                geo.game.menu_game_1_image.height = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_shadow.x, 105.6, 500, function(value)
-                geo.game.menu_game_1_shadow.x = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_shadow.y, 198.72, 500, function(value)
-                geo.game.menu_game_1_shadow.y = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_shadow.width, 659.52, 500, function(value)
-                geo.game.menu_game_1_shadow.width = value;
-            end)
-
-            geo.tween_system.create(geo.game.menu_game_1_shadow.height, 398.4, 500, function(value)
-                geo.game.menu_game_1_shadow.height = value;
-            end)
+            if key == 'Escape' then
+                _G.animations.tween(original_dimensions)
+            end
         end)
 
         geo.game.menu_game_1_image.on_click(function() 
-            animations.home_to_back()
+            _G.animations.tween(objects, 'game_1')
+        end)
+
+        geo.game.menu_game_2_image.on_click(function()
+            _G.animations.tween(objects, 'game_2')
         end)
         "/>
     </object>
