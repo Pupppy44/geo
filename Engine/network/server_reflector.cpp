@@ -21,6 +21,17 @@ namespace geo {
 
 					DEBUG("received remote event '" + id + "' with data '" + data + "' from client " + peer.guid);
 				}
+				else if (type == pascal::PASCAL_PACKET_CHAT) {
+					auto player = server->players.get_player(peer.guid);
+					if (player == nullptr || packet.empty()) return;
+
+					// Create chat packet
+					nlohmann::json chat;
+					chat["name"] = player->get_property<std::string>("name");
+					chat["message"] = packet;
+
+					server->svr.broadcast(chat.dump(), pascal::PASCAL_PACKET_CHAT);
+				}
 			});
 
 			// Run a loop that reflects updated properties

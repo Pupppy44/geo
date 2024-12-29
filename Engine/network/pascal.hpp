@@ -40,7 +40,8 @@ namespace pascal {
 		PASCAL_PACKET_CREATE,
 		PASCAL_PACKET_DESTROY,
 		PASCAL_PACKET_REFLECT,
-		PASCAL_PACKET_REMOTE_EVENT
+		PASCAL_PACKET_REMOTE_EVENT,
+		PASCAL_PACKET_CHAT
 	};
 
 	// Packet structure for sending and receiving

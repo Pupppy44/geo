@@ -149,6 +149,12 @@ namespace geo {
 					}
 				}
 			};
+
+			// Send a chat
+			lua["geo"]["send_chat"] = [&](std::string message) {
+				if (!game->client.cli.connected || message.empty()) return;
+				game->client.cli.send(message, pascal::PASCAL_PACKET_CHAT);
+			};
 #ifdef CLIENT
 			// Load a game from a Geo XML file
 			lua["geo"]["load"] = [&](std::string xml) {

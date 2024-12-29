@@ -77,6 +77,20 @@ namespace geo {
 
 					DEBUG("received remote event: " + id + " (data = " + data + ")");
 				}
+				// Chat
+				else if (type == pascal::PASCAL_PACKET_CHAT) {
+					// Parse the chat packet
+					nlohmann::json chat = nlohmann::json::parse(packet);
+
+					// Chat information
+					std::string name = chat["name"];
+					std::string message = chat["message"];
+
+					// Display the chat message
+					game->runner.lua["__CORE_UI_CHAT_ADD_MESSAGE"](name, message);
+
+					DEBUG("received chat message from " + name + ": " + message);
+				}
 			});
 
 			// Listen to disconnects from the server
