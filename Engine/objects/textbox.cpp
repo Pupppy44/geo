@@ -24,7 +24,7 @@ namespace geo {
 			float radius = get_property<float>("radius");
 			std::string color = get_property<std::string>("color");
 			float opacity = get_property<float>("opacity");
-			float outline_width = (focused ? 5.0f : (hovered ? 4.0f : 3.0f));
+			float outline_width = get_property<bool>("enable_outline", true) ? ((focused ? 5 : (hovered ? 4 : 3))) : 0;
 			std::string outline_color = get_property<std::string>("outline_color");
 			float font_size = height * get_property<float>("font_scale", 0.6f);
 			float text_x = x - x_offset;
