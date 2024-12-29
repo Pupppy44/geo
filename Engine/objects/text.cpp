@@ -82,19 +82,13 @@ namespace geo {
 				color,
 				&brush
 			); 
-
-			// Apply X/Y
-			context->SetTransform(D2D1::Matrix3x2F::Translation(x, y));
 			
 			// Draw text
 			context->DrawTextLayout(
-				D2D1::Point2F(),
+				D2D1::Point2F(x, y),
 				text_layout,
 				brush
 			);
-
-			// Reset X/Y
-			context->SetTransform(D2D1::Matrix3x2F::Identity());
 
 			// Release resources
 			brush->Release();

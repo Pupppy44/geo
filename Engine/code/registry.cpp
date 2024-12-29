@@ -51,6 +51,11 @@ namespace geo {
 
 			lua["geo"]["speech_system"] = std::make_shared<speech_system>(*game);
 			speech_system::bind<systems::speech_system>(game, lua);
+
+			auto _animation_system = std::make_shared<animation_system>(*game);
+			lua["geo"]["animation_system"] = _animation_system;
+			animation_system::bind<systems::animation_system>(game, lua);
+			game->engine.tree.add_object(_animation_system);
 		}
 
 		void registry::register_tree() {

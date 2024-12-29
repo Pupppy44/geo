@@ -2,6 +2,7 @@
 #include "../tree/tree.h"
 #include <d2d1_3.h>
 #include <d3d11_1.h>
+#include <functional>
 
 namespace geo {
 	namespace core {
@@ -31,6 +32,9 @@ namespace geo {
 			// Render the next frame onto the screen
 			void render();
 
+			// On render callback
+			void on_render(std::function<bool()>);
+
 			// Get the rendering screen as a bitmap
 			ID2D1Bitmap1* get_screen();
 
@@ -57,6 +61,8 @@ namespace geo {
 			bool queue_stop;
 			// Determines if the engine is rendering or not
 			bool rendering;
+			// On render callback
+			std::vector<std::function<bool()>> on_render_callbacks;
 			
 			ID3D11Device1* d3d_device;
 			ID3D11DeviceContext1* d3d_context;

@@ -30,6 +30,18 @@ namespace geo {
 				d2d_context->BeginDraw();
 				d2d_context->Clear(game->window.get_background());
 
+				// Run on render callbacks
+				for (auto& callback : on_render_callbacks) {
+					if (!callback()) {
+						std::vector<std::function<bool()>> new_callbacks;
+						for (auto& cb : on_render_callbacks) {
+							if (&cb != &callback) {
+								new_callbacks.push_back(cb);
+							}
+						}
+					}
+				}
+
 				// Render objects in the game tree
 				for (auto& obj : tree.get_objects()) {
 					if (obj->request_destroy()) {
@@ -67,6 +79,10 @@ namespace geo {
 
 				d2d_context->EndDraw();
 			}
+		}
+
+		void engine::on_render(std::function<bool()> callback) {
+			on_render_callbacks.push_back(callback);
 		}
 
 		ID2D1Bitmap1* engine::get_screen() {

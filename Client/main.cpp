@@ -18,7 +18,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//game.start_local_game("X:\\GeoGames\\Sandbox\\textbox_test.xml", false);
 	//game.start_local_game("X:\\GeoGames\\Sandbox\\scrollbox_test.xml", false);
-	game.start_local_game("X:\\GeoGames\\Sandbox\\chat_test.xml", false);
+	game.start_local_game("X:\\GeoGames\\Sandbox\\animation_system_test.xml", false);
 	//game.start_online_game("127.0.0.1", 1337);
 
 	if (argc == 2) {

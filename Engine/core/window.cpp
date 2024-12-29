@@ -135,7 +135,7 @@ namespace geo {
 				else
 				{
 					game->engine.render();
-					Sleep(1000 / 144);
+					Sleep(1000 / 240);
 				}
 			}
 		}
