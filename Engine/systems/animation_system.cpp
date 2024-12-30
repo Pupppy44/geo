@@ -62,36 +62,87 @@ namespace geo {
 			for (auto& animation : animations) {}
 		}
 
-		std::vector<std::pair<float, float>> animation_system::create_path(std::shared_ptr<object> object, std::string data) {
-			std::vector<std::pair<float, float>> path_data;
+        std::vector<std::pair<float, float>> animation_system::create_path(std::shared_ptr<object> object, std::string data) {
+            std::vector<std::pair<float, float>> path_data;
+			std::vector<std::pair<float, float>> original_path_data; // For relative movement
 
-			// Split function
-			auto split = [](std::string s, char delim) {
-				std::vector<std::string> result;
-				std::stringstream ss(s);
-				std::string item;
-				while (std::getline(ss, item, delim)) {
-					result.push_back(item);
-				}
-				return result;
-			};
+            // Split function
+            auto split = [](std::string s, char delim) {
+                std::vector<std::string> result;
+                std::stringstream ss(s);
+                std::string item;
+                while (std::getline(ss, item, delim)) {
+                    result.push_back(item);
+                }
+                return result;
+                };
 
-			// Split the data into pairs (x,y|x,y|x,y|...)
-			auto pairs = split(data, '|');
-			for (auto& pair : pairs) {
-				auto xy = split(pair, ',');
-				path_data.push_back({ std::stof(xy[0]), std::stof(xy[1]) });
-			}
+            // Split the data into mode and path data
+            auto split_data = split(data, ' ');
+            if (split_data.size() != 2 || (split_data[0] != "origin" && split_data[0] != "absolute")) {
+                ERR("invalid path data: " + data);
+                return path_data;
+            }
+            std::string mode = split_data[0];
+            data = split_data[1];
 
-			// Path will be handled by the engine loop
-			animation_system::path path = {
-				path_data,
-				object
-			};
-			paths.push_back(path);
-			
-			return path_data;
-		}
+            // Split the path data into pairs (x,y|x,y|x,y|...)
+            auto pairs = split(data, '|');
+			int index = 0;
+            for (auto& pair : pairs) {
+                auto xy = split(pair, ',');
+
+                if (xy.size() != 2) {
+                    ERR("invalid path data: " + data);
+                    return path_data;
+                }
+
+                // Parse the x, y coordinates
+                float x = std::stof(xy[0]);
+                float y = std::stof(xy[1]);
+
+                if (mode == "origin") {
+                    // Get the object's position (assuming `object->get_property()` gets the position)
+                    float object_x = object->get_property<float>("x");
+                    float object_y = object->get_property<float>("y");
+
+                    if (path_data.empty()) {
+                        // First point is the object's position (so path starts from the object)
+                        path_data.push_back({ object_x, object_y });
+						original_path_data.push_back({ x, y });
+                    }
+                    else {
+						original_path_data.push_back({ x, y });
+
+						float x_offset = original_path_data[index].first - original_path_data[index - 1].first;
+						float y_offset = original_path_data[index].second - original_path_data[index - 1].second;
+
+						// Calculate the previous point's position
+						float prev_x = path_data[index - 1].first;
+						float prev_y = path_data[index - 1].second;
+
+						// Add the offset to the previous point's position
+						path_data.push_back({ prev_x + x_offset, prev_y + y_offset });
+
+						DEBUG("pathing object (id=" + object->id() + ") to " + std::to_string(prev_x + x) + "," + std::to_string(prev_y + y));
+                    }
+                    index++;
+                }
+                else {
+                    // If mode is "absolute", use the coordinates as they are
+                    path_data.push_back({ x, y });
+                }
+            }
+
+            // Path will be handled by the engine loop
+            animation_system::path path = {
+                .points = path_data,
+                .object = object
+            };
+            paths.push_back(path);
+
+            return path_data;
+        }
 
 		sol::table animation_system::path_to_table(lua_State* state, std::vector<std::pair<float, float>> path) {
 			sol::table table = sol::state_view(state).create_table();
