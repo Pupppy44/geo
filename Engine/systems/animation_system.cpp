@@ -102,7 +102,6 @@ namespace geo {
                 float y = std::stof(xy[1]);
 
                 if (mode == "origin") {
-                    // Get the object's position (assuming `object->get_property()` gets the position)
                     float object_x = object->get_property<float>("x");
                     float object_y = object->get_property<float>("y");
 
@@ -129,7 +128,6 @@ namespace geo {
                     index++;
                 }
                 else {
-                    // If mode is "absolute", use the coordinates as they are
                     path_data.push_back({ x, y });
                 }
             }
