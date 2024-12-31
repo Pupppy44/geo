@@ -1,6 +1,6 @@
 #pragma once
 #include "../tree/object.h"
-#include "../util/rich_text.h"
+#include "../helpers/rich_text.h"
 
 namespace geo {
 	namespace objects {

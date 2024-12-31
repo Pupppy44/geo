@@ -135,12 +135,16 @@ namespace geo {
 				return default_value;
 			}
 			
-			void set_property(property prop);
+			// Property setters for different types
+			void set_property(property);
+			void set_property(std::string, std::string);
+			void set_property(std::string, float);
+			void set_property(std::string, bool);
 
 			std::vector<property> get_properties();
 			void set_properties(std::vector<property>);
 
-			property operator[](std::string name);
+			property operator[](std::string);
 
 			// Function methods
 			std::vector<function> get_functions();
@@ -155,6 +159,9 @@ namespace geo {
 		
 			// Drawing context
 			ID2D1DeviceContext* context = 0;
+
+			// Game reference
+			core::game* game = 0;
 		protected:
 			bool _destroy = false; // Destroy request state
 			std::string _type; // Type of object, use type() to read/write

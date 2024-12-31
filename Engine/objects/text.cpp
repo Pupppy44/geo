@@ -123,7 +123,7 @@ namespace geo {
 			}
 
 			// Setup rich text
-			auto rich_text_data = util::rich_text::parse(get_property<std::string>("text"));
+			auto rich_text_data = helpers::rich_text::parse(get_property<std::string>("text"));
 			wchar_t* text = util::string_to_wchar(rich_text_data.first);
 			auto elements = rich_text_data.second;
 

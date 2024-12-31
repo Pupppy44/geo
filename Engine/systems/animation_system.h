@@ -6,6 +6,10 @@ namespace geo {
 		class game;
 	}
 
+	namespace helpers {
+		class animations;
+	}
+
 	namespace systems {
 		// System for text-to-speech
 		class animation_system : public tree::object {
@@ -38,7 +42,8 @@ namespace geo {
 			// System data
 			std::vector<path> paths;
 			std::vector<animation> animations;
-
+			// Animation helper
+			helpers::animations* animation_helper = nullptr;
 		};
 	}
 }

@@ -103,6 +103,7 @@ namespace geo {
 			// Initiate all objects
 			for (auto& obj : game->engine.tree.get_objects()) {
 				obj->context = game->engine.get_context();
+				obj->game = game;
 				obj->init();
 			}
 

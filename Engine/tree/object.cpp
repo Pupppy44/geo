@@ -30,6 +30,20 @@ namespace geo {
 			properties.push_back(prop);
         }
 
+		// Overloads for setting properties //
+
+		void object::set_property(std::string name, std::string value) {
+			set_property({ property_type::STRING, name, value });
+		}
+
+        void object::set_property(std::string name, float value) {
+            set_property({ property_type::NUMBER, name, std::to_string(value)});
+        }
+
+		void object::set_property(std::string name, bool value) {
+			set_property({ property_type::BOOLEAN, name, value ? "true" : "false" });
+		}
+
         void object::set_properties(std::vector<property> properties) {
             for (auto& prop : properties) {
                 set_property(prop);

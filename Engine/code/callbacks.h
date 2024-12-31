@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "../tree/callback.h"
-#include "../util/tween.h"
+#include "../helpers/tween.h"
 
 namespace geo {
 	namespace core {
@@ -33,7 +33,7 @@ namespace geo {
 			std::vector<tree::callback> events;
 			std::vector<tree::callback> inputs;
 			std::vector<tree::callback> clicks;
-			std::vector<util::tween> tweens;
+			std::vector<helpers::tween> tweens;
 		private:
 			geo::core::game* game = nullptr;
 		};

@@ -8,9 +8,11 @@ namespace geo {
 
 		void textbox::init() {
 			rect_object.context = context;
+			rect_object.game = game;
 			rect_object.init();
 
 			text_object.context = context;
+			text_object.game = game;
 			text_object.init();
 		};
 

@@ -160,6 +160,7 @@
     <ClInclude Include="objects\textbox.h" />
     <ClInclude Include="tree\callback.h" />
     <ClInclude Include="systems\tween_system.h" />
+    <ClInclude Include="helpers\animations.h" />
     <ClInclude Include="util\api.h" />
     <ClInclude Include="util\helpers.h" />
     <ClInclude Include="util\debugger.h" />
@@ -183,8 +184,8 @@
     <ClInclude Include="server\server.h" />
     <ClInclude Include="core\window.h" />
     <ClInclude Include="tree\tree.h" />
-    <ClInclude Include="util\rich_text.h" />
-    <ClInclude Include="util\tween.h" />
+    <ClInclude Include="helpers\rich_text.h" />
+    <ClInclude Include="helpers\tween.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="code\callbacks.cpp" />

@@ -4,10 +4,10 @@
 #include <regex>
 #include <d2d1_3.h>
 #include <dwrite.h>
-#include "helpers.h"
+#include "../util/helpers.h"
 
 namespace geo {
-	namespace util {
+	namespace helpers {
 		// Class for parsing and rendering rich text for the text object
 		class rich_text {
 		public:

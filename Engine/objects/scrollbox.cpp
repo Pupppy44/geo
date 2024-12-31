@@ -17,6 +17,7 @@ namespace geo {
 			// Initialize children
 			for (auto child : children) {
 				child->context = context;
+				child->game = game;
 				child->init();
 			}
 

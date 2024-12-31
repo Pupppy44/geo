@@ -1,6 +1,6 @@
 #include "tween_system.h"
 #include "../core/game.h"
-#include "../util/tween.h"
+#include "../helpers/tween.h"
 using namespace geo::util;
 
 namespace geo {
@@ -15,7 +15,7 @@ namespace geo {
 				sol::function callback = args[3].as<sol::function>();
 				
 				// Create the tween object
-				tween t(initial, target, duration, tween::easing::sine_ease_in_out);
+				helpers::tween t(initial, target, duration, helpers::tween::easing::sine_ease_in_out);
 				t.callback = [=](float value, float elapsed) {
 					callback(value, elapsed);
 				};

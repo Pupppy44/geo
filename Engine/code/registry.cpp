@@ -122,6 +122,7 @@ namespace geo {
 				
 				// Initialize it here because it's not done in the parser
 				obj->context = game->engine.get_context();
+				obj->game = game;
 				obj->init();
 				
 				return sol::make_object(state, obj);

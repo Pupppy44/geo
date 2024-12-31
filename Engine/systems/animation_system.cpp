@@ -1,10 +1,13 @@
 #include "animation_system.h"
-#include "../core/game.h"
+#include "../helpers/animations.h"
 
 namespace geo {
     namespace systems {
         animation_system::animation_system(core::game& g) : game(&g) {
             type("animation_system");
+
+			// Initialize the animation helper
+			animation_helper = new helpers::animations();
 
 			// Create a path given a list of x,y|x,y|x,y... coordinates
             define("create_path", [&](sol::variadic_args args) -> sol::object {
@@ -17,7 +20,22 @@ namespace geo {
 
 				return table_path;
             });
-        }
+
+			// Create an animation
+			define("create_animation", [&](sol::variadic_args args) -> sol::object {
+				std::shared_ptr<object> object = args[0].as<std::shared_ptr<tree::object>>();
+				std::string type = args[1].as<std::string>();
+
+				// Create the animation
+				animation a = {
+					.type = type,
+					.object = object
+				};
+				animations.push_back(a);
+
+				return sol::nil;
+			});
+		}
 
 		void animation_system::render() {
 			render_paths();
@@ -59,7 +77,10 @@ namespace geo {
 		}
 
 		void animation_system::render_animations() {
-			for (auto& animation : animations) {}
+			for (auto& animation : animations) {
+				animation_helper->run_animation(animation.type, animation.object);
+			}
+			animations = {};
 		}
 
         std::vector<std::pair<float, float>> animation_system::create_path(std::shared_ptr<object> object, std::string data) {
@@ -122,8 +143,6 @@ namespace geo {
 
 						// Add the offset to the previous point's position
 						path_data.push_back({ prev_x + x_offset, prev_y + y_offset });
-
-						DEBUG("pathing object (id=" + object->id() + ") to " + std::to_string(prev_x + x) + "," + std::to_string(prev_y + y));
                     }
                     index++;
                 }

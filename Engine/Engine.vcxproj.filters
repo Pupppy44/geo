@@ -212,7 +212,7 @@
     <ClInclude Include="systems\http_system.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util\tween.h">
+    <ClInclude Include="helpers\tween.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\tween_system.h">
@@ -242,10 +242,13 @@
     <ClInclude Include="objects\scrollbox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util\rich_text.h">
+    <ClInclude Include="helpers\rich_text.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="systems\animation_system.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="helpers\animations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

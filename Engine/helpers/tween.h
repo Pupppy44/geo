@@ -6,7 +6,7 @@
 #include <math.h>
 
 namespace geo {
-	namespace util {
+	namespace helpers {
         class tween {
         public:
             enum class easing {
