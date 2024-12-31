@@ -120,7 +120,51 @@ namespace geo {
 			}
 
 			void _run_fly_in_animation(std::shared_ptr<tree::object> object, animation_options options) {
-				// :) 
+				float duration = std::stof(options.get("duration", "500"));
+				std::string type = options.get("type", "in");
+				std::string direction = options.get("from", "left");
+				float padding = std::stof(options.get("padding", "10")); // Pixels between object and edge of screen
+
+				float initial_x = object->get_property<float>("x");
+				float initial_y = object->get_property<float>("y");
+				float offset_width = object->get_property<float>("width") + initial_x + padding;
+				float offset_height = object->get_property<float>("height") + initial_y + padding;
+
+				// Calculate offscreen positions based on type and direction
+				float offscreen_x = (type == "in")
+					? (direction == "left" ? initial_x - offset_width :
+						(direction == "right" ? initial_x + offset_width : initial_x))
+					: (direction == "left" ? initial_x - offset_width :
+						(direction == "right" ? initial_x + offset_width : initial_x));
+
+				float offscreen_y = (type == "in")
+					? (direction == "top" ? initial_y - offset_height :
+						(direction == "bottom" ? initial_y + offset_height : initial_y))
+					: (direction == "top" ? initial_y - offset_height :
+						(direction == "bottom" ? initial_y + offset_height : initial_y));
+
+				// If the animation type is "in", set the initial position to offscreen
+				if (type == "in") {
+					object->set_property("x", offscreen_x);
+					object->set_property("y", offscreen_y);
+				}
+
+				helpers::tween t(offscreen_x, initial_x, duration, helpers::tween::easing::sine_ease_out);
+				helpers::tween t2(offscreen_y, initial_y, duration, helpers::tween::easing::sine_ease_out);
+
+				// Update the position of the object based on tweened values
+				t.callback = [=](float current_x, float elapsed) {
+					object->set_property("x", current_x);
+					DEBUG("helpers::animations: flying " + type + " object (id=" + object->id() + ") to x=" + std::to_string(current_x));
+					};
+
+				t2.callback = [=](float current_y, float elapsed) {
+					object->set_property("y", current_y);
+					DEBUG("helpers::animations: flying " + type + " object (id=" + object->id() + ") to y=" + std::to_string(current_y));
+					};
+
+				object->game->runner.callbacks.tweens.push_back(t);
+				object->game->runner.callbacks.tweens.push_back(t2);
 			}
 		};
 	}
