@@ -65,17 +65,22 @@ namespace geo {
 
 			// Private animation functions /// 
 
-			void _run_zoom_animation(std::shared_ptr<tree::object> object, animation_options options) {
+	void _run_zoom_animation(std::shared_ptr<tree::object> object, animation_options options) {
 				float initial_width = (options.get("type", "in") == "in") ? 0.0f : object->get_property<float>("width");
 				float initial_height = (options.get("type", "in") == "in") ? 0.0f : object->get_property<float>("height");
 				float target_width = (options.get("type", "in") == "in") ? object->get_property<float>("width") : 0.0f;
 				float target_height = (options.get("type", "in") == "in") ? object->get_property<float>("height") : 0.0f;
 
 				// center, top_left, top_right, bottom_left, bottom_right
-				std::string zoom_origin = options.get("origin", "bottom_right");
+				std::string zoom_origin = options.get("origin", "center");
 
 				float initial_x = object->get_property<float>("x");
 				float initial_y = object->get_property<float>("y");
+
+				float original_right = initial_x + initial_width;
+				float original_bottom = initial_y + initial_height;
+				float original_center_x = initial_x + (initial_width / 2.0f);
+				float original_center_y = initial_y + (initial_height / 2.0f);
 
 				helpers::tween t(initial_width, target_width, std::stof(options.get("duration", "500")), helpers::tween::easing::sine_ease_in_out);
 
@@ -94,18 +99,18 @@ namespace geo {
 						__noop; // Is it cool to use this? (no)
 					}
 					else if (zoom_origin == "top_right") {
-						new_x = initial_x - delta_width;
+						new_x = original_right - current_width;
 					}
 					else if (zoom_origin == "bottom_left") {
-						new_y = initial_y - delta_height;
+						new_y = original_bottom - current_height;
 					}
 					else if (zoom_origin == "bottom_right") {
-						new_x = initial_x - delta_width;
-						new_y = initial_y - delta_height;
+						new_x = original_right - current_width;
+						new_y = original_bottom - current_height;
 					}
-					else if (zoom_origin == "center") { 
-						new_x = initial_x - delta_width / 2.0f;
-						new_y = initial_y - delta_height / 2.0f;
+					else if (zoom_origin == "center") {
+						new_x = original_center_x - (current_width / 2.0f);
+						new_y = original_center_y - (current_height / 2.0f);
 					}
 
 					object->set_property("x", new_x);
